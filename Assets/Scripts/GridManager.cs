@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Grid))]
 public class GridManager : MonoBehaviour
@@ -8,20 +9,17 @@ public class GridManager : MonoBehaviour
     [Header("Map Generation")]
     // TODO spawn different things, generate a more interesting map, probably make this a scriptable object
     [SerializeField]
-    private GameObject team1StartObject;
-    [SerializeField]
-    private GameObject team2StartObject;
+    private GameObject testStartObject;
     [SerializeField]
     private Vector2Int[] team1SpawnPositions;
     [SerializeField]
     private Vector2Int[] team2SpawnPositions;
 
-    // TODO - cleverer area size, possibly
-    private const int X = 8;
-    private const int Y = 8;
-
     // TODO: Abstracted square info which has a building layer and creature layer, rather than just game objects
-    private GameObject[,] gridItems = new GameObject[X, Y];
+    //private GridObject[,] gridObjects = new GridObject[X, Y];
+    private Dictionary<Vector3Int, GridObject> gridObjects = new Dictionary<Vector3Int, GridObject>();
+    private Vector3Int selected;
+    private Vector3Int hovered;
 
     private Grid grid;
     [Header("Tiles")]
@@ -39,31 +37,59 @@ public class GridManager : MonoBehaviour
         grid = GetComponent<Grid>();
 
         foreach (var spawnPosition in team1SpawnPositions)
-            SpawnGridItem(team1StartObject, spawnPosition);
+        {
+            var gridObject = SpawnGridObject(testStartObject, spawnPosition);
+            gridObject.GetComponent<SpriteRenderer>().color = new Color(1, 0.5f, 0);
+        }
 
         foreach (var spawnPosition in team2SpawnPositions)
-            SpawnGridItem(team2StartObject, spawnPosition);
+        {
+            var gridObject = SpawnGridObject(testStartObject, spawnPosition);
+            gridObject.GetComponent<SpriteRenderer>().color = new Color(0, 0.5f, 1);
+        }
     }
 
-    public void SpawnGridItem(GameObject otherPrefab, Vector2Int position)
+    public GridObject SpawnGridObject(GameObject otherPrefab, Vector2Int cellPosition)
     {
-        SpawnGridItem(otherPrefab, position.x, position.y);
+        return SpawnGridObject(otherPrefab, new Vector3Int(cellPosition.x, cellPosition.y, 0));
     }
 
-    public void SpawnGridItem(GameObject otherPrefab, int x, int y)
+    public GridObject SpawnGridObject(GameObject otherPrefab, Vector3Int cellPosition)
     {
-        gridItems[x, y] = GameObject.Instantiate(otherPrefab, grid.CellToWorld(new Vector3Int(x, y, 0)), Quaternion.identity);
+        //var cellPosition = new Vector3Int(x, y, 0);
+        gridObjects[cellPosition] = GameObject.Instantiate(otherPrefab, grid.CellToWorld(cellPosition), Quaternion.identity).GetComponent<GridObject>();
+        return gridObjects[cellPosition];
     }
 
     private void HoverCell(Vector3Int cell)
     {
+        if (cell != hovered)
+        {
+            if (gridObjects.ContainsKey(hovered))
+                gridObjects[hovered].Unhover();
 
+            if (gridObjects.ContainsKey(cell))
+                gridObjects[cell].Hover();
+        }
+
+        hovered = cell;
     }
 
     private void SelectCell(Vector3Int cell)
     {
         overlaysTilemap.ClearAllTiles();
         overlaysTilemap.SetTile(cell, selectTile);
+
+        if (cell != selected)
+        {
+            if (gridObjects.ContainsKey(selected))
+                gridObjects[selected].Deselect();
+
+            if (gridObjects.ContainsKey(cell))
+                gridObjects[cell].Select();
+        }
+
+        selected = cell;
     }
 
     // Update is called once per frame
