@@ -58,7 +58,7 @@ jobs:
       
       # Tests
       # This is where I would put my tests...
-      # IF I HAD ANY
+      # IF I HAD ANY!
 
       # Build
       - name: Build project
