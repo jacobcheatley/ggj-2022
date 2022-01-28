@@ -103,8 +103,6 @@ public class Unit : GridObject
     {
         base.ClickCell(cell);
 
-        // TODO: Logic for attacks if clicking on enemy... etc
-        // Probably needs recalcuation or rethinking
         switch (selectionMode)
         {
             case SelectionMode.None:
