@@ -285,4 +285,9 @@ public class Unit : GridObject
     {
 
     }
+
+    public override bool HasDoneEverythingThisTurn()
+    {
+        return hasMoved && hasDoneAction;
+    }
 }

@@ -98,6 +98,11 @@ public class GridObject : MonoBehaviour
         Debug.Log($"End Turn {name}");
     }
 
+    public virtual bool HasDoneEverythingThisTurn()
+    {
+        return true;
+    }
+
     /// <returns>True if the click performed some action</returns>
     public virtual bool ClickCell(Vector3Int cell)
     {
