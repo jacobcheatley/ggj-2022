@@ -35,12 +35,23 @@ public class GridManager : MonoBehaviour
     [SerializeField]
     private Tile blankTile;
 
+    enum Team
+    {
+        Me,
+        Enemy
+    }
+
+    private Team whoseTurn;
+
     public static GridManager instance;
 
     private void Start()
     {
         instance = this;
         grid = GetComponent<Grid>();
+
+        // TODO: Deterministic logic here.
+        whoseTurn = Team.Me;
 
         foreach (var spawnPosition in team1SpawnPositions)
         {
@@ -151,6 +162,11 @@ public class GridManager : MonoBehaviour
         }
 
         overlaysTilemap.SetTile(cell, selectTile);
+    }
+
+    public void DeselectCurrentItem()
+    {
+        selectedObject = null;
     }
 
     void Update()

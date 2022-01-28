@@ -42,9 +42,14 @@ public class GridObject : MonoBehaviour
         gridManager.SetPosition(cellPosition, toCell);
     }
 
-    public virtual void Turn()
+    public virtual void StartTurn()
     {
-        Debug.Log($"Turn {name}");
+        Debug.Log($"Start Turn {name}");
+    }
+
+    public virtual void EndTurn()
+    {
+        Debug.Log($"End Turn {name}");
     }
 
     public virtual bool ClickCell(Vector3Int cell)

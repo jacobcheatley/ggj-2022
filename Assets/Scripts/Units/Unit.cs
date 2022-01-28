@@ -8,6 +8,9 @@ public class Unit : GridObject
     private float movedDistanceThisRound = 0;
     private List<Vector3Int> moveableCells;
 
+    private bool hasMoved;
+    private bool hasDoneAction;
+
     public override GridObject Init(GridManager gridManager, Vector3Int cellPosition)
     {
         moveableCells = gridManager.WithinCells(cellPosition, speed - movedDistanceThisRound);
@@ -17,7 +20,10 @@ public class Unit : GridObject
     public override void Select()
     {
         base.Select();
-        moveableCells = gridManager.WithinCells(cellPosition, speed - movedDistanceThisRound);
+        if (!hasMoved)
+        {
+            moveableCells = gridManager.WithinCells(cellPosition, speed - movedDistanceThisRound);
+        }
         gridManager.HighlightCells(moveableCells, new Color(0, 1, 0, 0.25f));
     }
 
@@ -27,14 +33,16 @@ public class Unit : GridObject
         // Probably needs recalcuation or rethinking
         if (moveableCells.Contains(cell))
         {
-            Move(cell); // TODO: Move command
+            Move(cell);
+            Deselect();
+            // TODO: Fancy multi-step movement
             //movedDistanceThisRound += 1f;
             //gridManager.SelectCell(cell);
-            return true;
+            return false;
         }
         else
         {
-            return false;
+            return true;
         }
     }
 
@@ -42,14 +50,28 @@ public class Unit : GridObject
     {
         base.Deselect();
         gridManager.ClearOverlay();
+        gridManager.DeselectCurrentItem();
     }
 
     public override void Move(Vector3Int toCell)
     {
-        base.Move(toCell);
+        if (!hasMoved)
+        {
+            base.Move(toCell);
+            moveableCells.Clear();
+        }
+        hasMoved = true;
     }
-    public override void Turn()
+
+    public override void StartTurn()
     {
+        hasMoved = false;
+        hasDoneAction = false;
         movedDistanceThisRound = 0;
+    }
+
+    public override void EndTurn()
+    {
+
     }
 }
