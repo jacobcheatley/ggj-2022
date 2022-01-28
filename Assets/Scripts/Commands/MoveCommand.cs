@@ -13,11 +13,11 @@ public class MoveCommand : ICommand
 
     public void Execute()
     {
-        GridManager.instance.Move(fromCell, toCell);
+        GridManager.instance.SetPosition(fromCell, toCell);
     }
 
     public void Undo()
     {
-        GridManager.instance.SetPosition(toCell, fromCell);
+        // GridManager.instance.SetPosition(toCell, fromCell);
     }
 }

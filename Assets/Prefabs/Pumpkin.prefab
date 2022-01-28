@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2290671356583921301}
   - component: {fileID: 8882383413272323559}
   - component: {fileID: 2456417197315186085}
+  - component: {fileID: -212042420067780781}
   m_Layer: 0
   m_Name: Pumpkin
   m_TagString: Untagged
@@ -97,3 +98,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cellPosition: {x: 0, y: 0, z: 0}
   speed: 3
+  movementHighlightColor: {r: 0, g: 1, b: 0, a: 0.25}
+  actionHighlightColor: {r: 1, g: 0, b: 0, a: 0.25}
+--- !u!114 &-212042420067780781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7564121688413721756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b72fb4d6193a2904fb52534a32d811cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

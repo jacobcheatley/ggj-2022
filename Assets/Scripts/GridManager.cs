@@ -12,7 +12,6 @@ public class GridManager : MonoBehaviour
     [SerializeField]
     private GameObject testStartObject;
 
-
     [SerializeField]
     private Vector2Int[] team1SpawnPositions;
     [SerializeField]
@@ -35,6 +34,18 @@ public class GridManager : MonoBehaviour
     [SerializeField]
     private Tile blankTile;
 
+    [Header("The other stuff")]
+    [SerializeField]
+    private CommandQueue commands;
+
+    enum Turn
+    {
+        Mine,
+        Theirs
+    }
+
+    private Turn whoseTurn;
+
     public static GridManager instance;
 
     private void Start()
@@ -42,16 +53,22 @@ public class GridManager : MonoBehaviour
         instance = this;
         grid = GetComponent<Grid>();
 
+        // TODO: Deterministic logic here.
+        whoseTurn = Turn.Mine;
+
         foreach (var spawnPosition in team1SpawnPositions)
         {
             var gridObject = SpawnGridObject(testStartObject, spawnPosition);
             gridObject.GetComponent<SpriteRenderer>().color = new Color(1, 0.5f, 0);
+            // TODO: Make sure we're only starting turn if it's our turn later on
+            gridObject.StartTurn();
         }
 
         foreach (var spawnPosition in team2SpawnPositions)
         {
             var gridObject = SpawnGridObject(testStartObject, spawnPosition);
             gridObject.GetComponent<SpriteRenderer>().color = new Color(0, 0.5f, 1);
+            gridObject.StartTurn();
         }
     }
 
@@ -62,13 +79,13 @@ public class GridManager : MonoBehaviour
 
     public GridObject SpawnGridObject(GameObject gridObjectPrefab, Vector3Int cellPosition)
     {
-        gridObjects[cellPosition] = Instantiate(gridObjectPrefab, grid.CellToWorld(cellPosition), Quaternion.identity).GetComponent<GridObject>().Init(this, cellPosition);
+        gridObjects[cellPosition] = Instantiate(gridObjectPrefab, grid.CellToWorld(cellPosition), Quaternion.identity).GetComponent<GridObject>().Init(this, commands, cellPosition);
         return gridObjects[cellPosition];
     }
 
-    public void Move(Vector3Int fromCell, Vector3Int toCell)
+    public bool PositionIsEmpty(Vector3Int pos)
     {
-        gridObjects[fromCell].Move(toCell);
+        return !gridObjects.ContainsKey(pos);
     }
 
     public void SetPosition(Vector3Int fromCell, Vector3Int toCell)
@@ -81,7 +98,27 @@ public class GridManager : MonoBehaviour
         gridObjects.Remove(fromCell);
     }
 
-    public List<Vector3Int> WithinCells(Vector3Int fromCell, float distance)
+    public void PerformAction(Vector3Int fromCell, Vector3Int toCell, int actionId)
+    {
+        gridObjects[fromCell].PerformAction(toCell, actionId);
+    }
+
+    public List<Vector3Int> WithinMoveableCells(Vector3Int fromCell, float distance)
+    {
+        return WithinCells(fromCell, distance, excludeSelf: true, excludeOthers: true);
+    }
+
+    public List<Vector3Int> WithinActionableCells(Vector3Int fromCell, float distance)
+    {
+        return WithinCells(fromCell, distance, excludeSelf: true, excludeOthers: false);
+    }
+
+    public List<Vector3Int> WithinCells(
+        Vector3Int fromCell,
+        float distance,
+        bool excludeSelf = false,
+        bool excludeOthers = false
+        )
     {
         // TODO: Probably need to Dijkstra's and figure out paths at some point - but not yet!
         var result = new List<Vector3Int>();
@@ -91,8 +128,21 @@ public class GridManager : MonoBehaviour
         {
             for (int y = (int)-distance; y <= (int)distance; y++)
             {
+                if (excludeSelf && x == 0 && y == 0)
+                {
+                    continue;
+                }
+
+                var targetCell = fromCell + Vector3Int.right * x + Vector3Int.up * y;
+                if (excludeOthers && !PositionIsEmpty(targetCell))
+                {
+                    continue;
+                }
+
                 if (x * x + y * y <= squaredDistance)
-                    result.Add(fromCell + Vector3Int.right * x + Vector3Int.up * y);
+                {
+                    result.Add(targetCell);
+                }
             }
         }
 
@@ -131,14 +181,26 @@ public class GridManager : MonoBehaviour
 
     private void ClickCell(Vector3Int cell)
     {
-        if (selectedObject == null || selectedObject.ClickCell(cell))
+        if (selectedObject == null)
+        {
             SelectCell(cell);
+        }
+        else
+        {
+            var performedSomeAction = selectedObject.ClickCell(cell);
+            if (!performedSomeAction)
+            {
+                SelectCell(cell);
+            }
+        }
     }
 
     public void SelectCell(Vector3Int cell)
     {
         overlaysTilemap.ClearAllTiles();
-        if (gridObjects.ContainsKey(cell) && gridObjects[cell] != selectedObject)
+        // We don't care if the selected cell is already selected. It can just go through
+        // its selection process again, which includes resetting the selection mode.
+        if (gridObjects.ContainsKey(cell))
         {
             selectedObject?.Deselect();
             selectedObject = gridObjects[cell];
@@ -153,6 +215,38 @@ public class GridManager : MonoBehaviour
         overlaysTilemap.SetTile(cell, selectTile);
     }
 
+    public void DeselectCurrentItem()
+    {
+        selectedObject = null;
+    }
+
+    public void StartTurn()
+    {
+        Debug.Log("Starting turn");
+
+        whoseTurn = Turn.Mine;
+        foreach (var item in gridObjects.Values)
+        {
+            item.StartTurn();
+        }
+    }
+
+    public void EndTurn()
+    {
+        Debug.Log("Ending Turn");
+
+        whoseTurn = Turn.Theirs;
+        foreach (var item in gridObjects.Values)
+        {
+            item.EndTurn();
+        }
+
+        commands.EndTurn();
+
+        // Until we have networking, their turn will immediately end.
+        StartTurn();
+    }
+
     void Update()
     {
         var currentHoveredCell = grid.WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition));
@@ -163,7 +257,36 @@ public class GridManager : MonoBehaviour
             HoverCell(currentHoveredCell);
 
             if (Input.GetMouseButtonDown(0))
+            {
                 ClickCell(currentHoveredCell);
+            }
+
+            // TODO: UI feedback if we failed to change mode (because the action/move was already used)
+            if (whoseTurn == Turn.Mine)
+            {
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    EndTurn();
+                }
+
+                if (Input.GetKeyDown(KeyCode.M))
+                {
+                    selectedObject?.EnterMoveMode();
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha1))
+                {
+                    selectedObject?.EnterActionMode(0);
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha2))
+                {
+                    selectedObject?.EnterActionMode(1);
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha3))
+                {
+                    selectedObject?.EnterActionMode(2);
+                }
+            }
         }
     }
 }
