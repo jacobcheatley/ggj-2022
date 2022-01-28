@@ -36,10 +36,28 @@ public class GridObject : MonoBehaviour
         Debug.Log($"Deselect {name}");
     }
 
+    // These return true if the mode change was successful
+    public virtual bool EnterMoveMode()
+    {
+        Debug.Log($"Entering move mode {name}");
+        return true;
+    }
+
+    public virtual bool EnterActionMode()
+    {
+        Debug.Log($"Entering action mode {name}");
+        return true;
+    }
+
     public virtual void Move(Vector3Int toCell)
     {
         Debug.Log($"Move {name}");
         gridManager.SetPosition(cellPosition, toCell);
+    }
+
+    public virtual void PerformAction(Vector3Int toCell)
+    {
+        Debug.Log($"Performing action {name}");
     }
 
     public virtual void StartTurn()
@@ -52,6 +70,7 @@ public class GridObject : MonoBehaviour
         Debug.Log($"End Turn {name}");
     }
 
+    /// <returns>True if the click performed some action</returns>
     public virtual bool ClickCell(Vector3Int cell)
     {
         Debug.Log($"Click {name}");
