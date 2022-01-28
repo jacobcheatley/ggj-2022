@@ -1325,8 +1325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d6c1b752f48084dbbf5307fafaca29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team1StartObject: {fileID: 7564121688413721756, guid: 9a417c161291abd4693377b85e36ddc7, type: 3}
-  team2StartObject: {fileID: 4500102687082396267, guid: 54452af9aac922d46848830a1e2cd377, type: 3}
+  testStartObject: {fileID: 7564121688413721756, guid: 9a417c161291abd4693377b85e36ddc7, type: 3}
   team1SpawnPositions:
   - {x: 1, y: 2}
   - {x: 1, y: 5}
@@ -1335,6 +1334,7 @@ MonoBehaviour:
   - {x: 6, y: 5}
   overlaysTilemap: {fileID: 608506312}
   selectTile: {fileID: 11400000, guid: 036bf45fd092c7c4eb6d5feffcb74b87, type: 2}
+  blankTile: {fileID: 11400000, guid: 147c823623905264fb38141dbdbc2a3a, type: 2}
 --- !u!156049354 &2053722142
 Grid:
   m_ObjectHideFlags: 0

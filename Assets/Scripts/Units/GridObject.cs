@@ -1,40 +1,55 @@
-﻿using System.Collections;
+﻿using System;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
 public class GridObject : MonoBehaviour
 {
+    [HideInInspector]
+    public Vector3Int cellPosition;
+    protected GridManager gridManager;
+
+
+    public virtual GridObject Init(GridManager gridManager, Vector3Int cellPosition)
+    {
+        this.cellPosition = cellPosition;
+        this.gridManager = gridManager;
+        this.gridManager = gridManager;
+        return this;
+    }
+
     public virtual void Hover()
     {
-        //throw new System.NotImplementedException();
         Debug.Log($"Hover {name}");
     }
     public virtual void Unhover()
     {
-        //throw new System.NotImplementedException();
         Debug.Log($"Unhover {name}");
     }
 
     public virtual void Select()
     {
-        //throw new System.NotImplementedException();
         Debug.Log($"Select {name}");
     }
+
     public virtual void Deselect()
     {
-        //throw new System.NotImplementedException();
         Debug.Log($"Deselect {name}");
     }
 
-    // Use this for initialization
-    void Start()
+    public virtual void Move(Vector3Int toCell)
     {
-
+        Debug.Log($"Move {name}");
+        gridManager.SetPosition(cellPosition, toCell);
     }
 
-    // Update is called once per frame
-    void Update()
+    public virtual void Turn()
     {
+        Debug.Log($"Turn {name}");
+    }
 
+    public virtual bool ClickCell(Vector3Int cell)
+    {
+        Debug.Log($"Click {name}");
+        return false;
     }
 }

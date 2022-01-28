@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2290671356583921301}
   - component: {fileID: 8882383413272323559}
-  - component: {fileID: 436111323781580234}
+  - component: {fileID: 2456417197315186085}
   m_Layer: 0
   m_Name: Pumpkin
   m_TagString: Untagged
@@ -83,7 +83,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
---- !u!114 &436111323781580234
+--- !u!114 &2456417197315186085
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -92,6 +92,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 7564121688413721756}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d268cbfd31f3cc74bbf1a3ab20a5c09b, type: 3}
+  m_Script: {fileID: 11500000, guid: 48b064479735d754a8142899549a7770, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cellPosition: {x: 0, y: 0, z: 0}
+  speed: 3
