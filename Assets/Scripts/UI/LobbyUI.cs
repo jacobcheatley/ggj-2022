@@ -68,11 +68,13 @@ class LobbyUI : MonoBehaviour
     {
         // TODO
         Debug.Log($"Connect (from Create) {message.name}");
+        SceneLoadManager.instance.LoadScene("Main");
     }
 
     private void Instance_OnConnectMessage_Join(ConnectMessage message)
     {
         // TODO
         Debug.Log($"Connect (from Join) {message.name}");
+        SceneLoadManager.instance.LoadScene("Main");
     }
 }
