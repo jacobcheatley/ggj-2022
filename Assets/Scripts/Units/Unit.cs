@@ -13,7 +13,8 @@ public class Unit : GridObject
 
     public override GridObject Init(GridManager gridManager, Vector3Int cellPosition)
     {
-        moveableCells = gridManager.WithinCells(cellPosition, speed - movedDistanceThisRound);
+        moveableCells = gridManager.WithinEmptyCells(cellPosition, speed - movedDistanceThisRound);
+
         return base.Init(gridManager, cellPosition);
     }
 
@@ -22,7 +23,7 @@ public class Unit : GridObject
         base.Select();
         if (!hasMoved)
         {
-            moveableCells = gridManager.WithinCells(cellPosition, speed - movedDistanceThisRound);
+            moveableCells = gridManager.WithinEmptyCells(cellPosition, speed - movedDistanceThisRound);
         }
         gridManager.HighlightCells(moveableCells, new Color(0, 1, 0, 0.25f));
     }

@@ -35,13 +35,13 @@ public class GridManager : MonoBehaviour
     [SerializeField]
     private Tile blankTile;
 
-    enum Team
+    enum Turn
     {
-        Me,
-        Enemy
+        Mine,
+        Theirs
     }
 
-    private Team whoseTurn;
+    private Turn whoseTurn;
 
     public static GridManager instance;
 
@@ -51,7 +51,7 @@ public class GridManager : MonoBehaviour
         grid = GetComponent<Grid>();
 
         // TODO: Deterministic logic here.
-        whoseTurn = Team.Me;
+        whoseTurn = Turn.Mine;
 
         foreach (var spawnPosition in team1SpawnPositions)
         {
@@ -79,7 +79,19 @@ public class GridManager : MonoBehaviour
 
     public void Move(Vector3Int fromCell, Vector3Int toCell)
     {
-        gridObjects[fromCell].Move(toCell);
+        if (PositionIsEmpty(toCell))
+        {
+            gridObjects[fromCell].Move(toCell);
+        }
+        else
+        {
+            Debug.Log("Can't move there.");
+        }
+    }
+
+    public bool PositionIsEmpty(Vector3Int pos)
+    {
+        return !gridObjects.ContainsKey(pos);
     }
 
     public void SetPosition(Vector3Int fromCell, Vector3Int toCell)
@@ -92,7 +104,12 @@ public class GridManager : MonoBehaviour
         gridObjects.Remove(fromCell);
     }
 
-    public List<Vector3Int> WithinCells(Vector3Int fromCell, float distance)
+    public List<Vector3Int> WithinEmptyCells(Vector3Int fromCell, float distance)
+    {
+        return WithinCells(fromCell, distance, onlyEmptyCells: true);
+    }
+
+    public List<Vector3Int> WithinCells(Vector3Int fromCell, float distance, bool onlyEmptyCells = false)
     {
         // TODO: Probably need to Dijkstra's and figure out paths at some point - but not yet!
         var result = new List<Vector3Int>();
@@ -102,8 +119,14 @@ public class GridManager : MonoBehaviour
         {
             for (int y = (int)-distance; y <= (int)distance; y++)
             {
-                if (x * x + y * y <= squaredDistance)
-                    result.Add(fromCell + Vector3Int.right * x + Vector3Int.up * y);
+                var targetCell = fromCell + Vector3Int.right * x + Vector3Int.up * y;
+                if (!onlyEmptyCells || PositionIsEmpty(targetCell))
+                {
+                    if (x * x + y * y <= squaredDistance)
+                    {
+                        result.Add(targetCell);
+                    }
+                }
             }
         }
 
@@ -169,6 +192,31 @@ public class GridManager : MonoBehaviour
         selectedObject = null;
     }
 
+    public void StartTurn()
+    {
+        Debug.Log("Starting turn");
+
+        whoseTurn = Turn.Mine;
+        foreach (var item in gridObjects.Values)
+        {
+            item.StartTurn();
+        }
+    }
+
+    public void EndTurn()
+    {
+        Debug.Log("Ending Turn");
+
+        whoseTurn = Turn.Theirs;
+        foreach (var item in gridObjects.Values)
+        {
+            item.EndTurn();
+        }
+
+        // Until we have networking, their turn will immediately end.
+        StartTurn();
+    }
+
     void Update()
     {
         var currentHoveredCell = grid.WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition));
@@ -179,7 +227,14 @@ public class GridManager : MonoBehaviour
             HoverCell(currentHoveredCell);
 
             if (Input.GetMouseButtonDown(0))
+            {
                 ClickCell(currentHoveredCell);
+            }
+
+            if (whoseTurn == Turn.Mine && Input.GetKeyDown(KeyCode.Space))
+            {
+                EndTurn();
+            }
         }
     }
 }
