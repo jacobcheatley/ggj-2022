@@ -27,11 +27,9 @@ public class Unit : GridObject
 
     private SelectionMode selectionMode = SelectionMode.None;
 
-    public override GridObject Init(GridManager gridManager, Vector3Int cellPosition)
+    public override GridObject Init(GridManager gridManager, CommandQueue commands, Vector3Int cellPosition)
     {
-        //moveableCells = gridManager.WithinEmptyCells(cellPosition, speed - movedDistanceThisRound);
-
-        return base.Init(gridManager, cellPosition);
+        return base.Init(gridManager, commands, cellPosition);
     }
 
     public override void Select()
@@ -110,14 +108,15 @@ public class Unit : GridObject
             case SelectionMode.Movement:
                 if (interactiveCells.Contains(cell))
                 {
-                    Move(cell);
+                    SubmitMoveCommand(cell);
                     return true;
                 }
                 return false;
             case SelectionMode.Action:
                 if (interactiveCells.Contains(cell))
                 {
-                    PerformAction(cell);
+                    // Multiple action selection comes later
+                    SubmitActionCommand(cell, 0);
                     return true;
                 }
                 return false;
@@ -133,14 +132,14 @@ public class Unit : GridObject
         gridManager.DeselectCurrentItem();
     }
 
-    public override void Move(Vector3Int toCell)
+    public override void SubmitMoveCommand(Vector3Int toCell)
     {
         if (!hasMoved)
         {
             // TODO: Fancy multi-step movement
             //movedDistanceThisRound += 1f;
             //gridManager.SelectCell(cell);
-            base.Move(toCell);
+            base.SubmitMoveCommand(toCell);
             ClearInteractiveCells();
             hasMoved = true;
 
@@ -155,11 +154,11 @@ public class Unit : GridObject
         }
     }
 
-    public override void PerformAction(Vector3Int target)
+    public override void SubmitActionCommand(Vector3Int target, int actionId)
     {
         if (!hasDoneAction)
         {
-            base.PerformAction(target);
+            base.SubmitActionCommand(target, actionId);
             ClearInteractiveCells();
             hasDoneAction = true;
 

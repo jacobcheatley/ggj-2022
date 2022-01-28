@@ -12,7 +12,6 @@ public class GridManager : MonoBehaviour
     [SerializeField]
     private GameObject testStartObject;
 
-
     [SerializeField]
     private Vector2Int[] team1SpawnPositions;
     [SerializeField]
@@ -34,6 +33,10 @@ public class GridManager : MonoBehaviour
     private Tile selectTile;
     [SerializeField]
     private Tile blankTile;
+
+    [Header("The other stuff")]
+    [SerializeField]
+    private CommandQueue commands;
 
     enum Turn
     {
@@ -76,20 +79,8 @@ public class GridManager : MonoBehaviour
 
     public GridObject SpawnGridObject(GameObject gridObjectPrefab, Vector3Int cellPosition)
     {
-        gridObjects[cellPosition] = Instantiate(gridObjectPrefab, grid.CellToWorld(cellPosition), Quaternion.identity).GetComponent<GridObject>().Init(this, cellPosition);
+        gridObjects[cellPosition] = Instantiate(gridObjectPrefab, grid.CellToWorld(cellPosition), Quaternion.identity).GetComponent<GridObject>().Init(this, commands, cellPosition);
         return gridObjects[cellPosition];
-    }
-
-    public void Move(Vector3Int fromCell, Vector3Int toCell)
-    {
-        if (PositionIsEmpty(toCell))
-        {
-            gridObjects[fromCell].Move(toCell);
-        }
-        else
-        {
-            Debug.Log("Can't move there.");
-        }
     }
 
     public bool PositionIsEmpty(Vector3Int pos)
@@ -105,6 +96,11 @@ public class GridManager : MonoBehaviour
         movedObject.transform.position = grid.CellToWorld(toCell);
         gridObjects[toCell] = movedObject;
         gridObjects.Remove(fromCell);
+    }
+
+    public void PerformAction(Vector3Int fromCell, Vector3Int toCell, int actionId)
+    {
+        gridObjects[fromCell].PerformAction(toCell, actionId);
     }
 
     public List<Vector3Int> WithinMoveableCells(Vector3Int fromCell, float distance)
@@ -244,6 +240,8 @@ public class GridManager : MonoBehaviour
         {
             item.EndTurn();
         }
+
+        commands.EndTurn();
 
         // Until we have networking, their turn will immediately end.
         StartTurn();

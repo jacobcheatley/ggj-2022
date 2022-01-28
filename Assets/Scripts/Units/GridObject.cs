@@ -7,13 +7,13 @@ public class GridObject : MonoBehaviour
     [HideInInspector]
     public Vector3Int cellPosition;
     protected GridManager gridManager;
+    protected CommandQueue commands;
 
-
-    public virtual GridObject Init(GridManager gridManager, Vector3Int cellPosition)
+    public virtual GridObject Init(GridManager gridManager, CommandQueue commands, Vector3Int cellPosition)
     {
         this.cellPosition = cellPosition;
         this.gridManager = gridManager;
-        this.gridManager = gridManager;
+        this.commands = commands;
         return this;
     }
 
@@ -49,15 +49,20 @@ public class GridObject : MonoBehaviour
         return true;
     }
 
-    public virtual void Move(Vector3Int toCell)
+    public virtual void SubmitMoveCommand(Vector3Int toCell)
     {
         Debug.Log($"Move {name}");
-        gridManager.SetPosition(cellPosition, toCell);
+        commands.Submit(new MoveCommand(cellPosition, toCell));
     }
 
-    public virtual void PerformAction(Vector3Int toCell)
+    public virtual void SubmitActionCommand(Vector3Int toCell, int actionId)
     {
-        Debug.Log($"Performing action {name}");
+        commands.Submit(new ActionCommand(cellPosition, toCell, actionId));
+    }
+
+    public virtual void PerformAction(Vector3Int toCell, int actionId)
+    {
+        Debug.Log($"Perform action {actionId}");
     }
 
     public virtual void StartTurn()
