@@ -274,6 +274,18 @@ public class Unit : GridObject
         actions.PerformAction(gridManager, toCell, actionId);
     }
 
+    public override void ApplyDamage(float amount)
+    {
+        base.ApplyDamage(amount);
+        // All damage is lethal :)
+        Destroy();
+    }
+
+    public override void Destroy()
+    {
+        base.Destroy();
+    }
+
     public override void StartTurn()
     {
         hasMoved = false;

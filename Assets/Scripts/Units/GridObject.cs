@@ -54,21 +54,10 @@ public class GridObject : MonoBehaviour
         Debug.Log($"Deselect {name}");
     }
 
-    // These return true if the mode change was successful
+    /// <returns>True if the mode change was successful. If false, no changes were applied.</returns>
     public virtual bool EnterMoveMode()
     {
         Debug.Log($"Entering move mode {name}");
-        return true;
-    }
-
-    public virtual bool HasAction(int actionId)
-    {
-        return false;
-    }
-
-    public virtual bool EnterActionMode(int actionId)
-    {
-        Debug.Log($"Entering action mode {actionId} {name}");
         return true;
     }
 
@@ -76,6 +65,18 @@ public class GridObject : MonoBehaviour
     {
         Debug.Log($"Move {name}");
         commands.Submit(new MoveCommand(cellPosition, toCell));
+    }
+
+    public virtual bool HasAction(int actionId)
+    {
+        return false;
+    }
+
+    /// <returns>True if the mode change was successful. If false, no changes were applied.</returns>
+    public virtual bool EnterActionMode(int actionId)
+    {
+        Debug.Log($"Entering action mode {actionId} {name}");
+        return true;
     }
 
     public virtual void SubmitActionCommand(Vector3Int toCell, int actionId)
@@ -108,5 +109,16 @@ public class GridObject : MonoBehaviour
     {
         Debug.Log($"Click {name}");
         return false;
+    }
+
+    public virtual void ApplyDamage(float amount)
+    {
+        Debug.Log($"Ouch. {name}");
+    }
+
+    public virtual void Destroy()
+    {
+        Debug.Log($"Big ouch. {name}");
+        gridManager.RemoveObject(cellPosition);
     }
 }

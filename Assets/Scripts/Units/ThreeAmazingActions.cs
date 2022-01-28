@@ -19,5 +19,14 @@ public class ThreeAmazingActions : IUnitActions
     public override void PerformAction(GridManager gridManager, Vector3Int toCell, int actionId)
     {
         base.PerformAction(gridManager, toCell, actionId);
+
+        if (!HasAction(actionId))
+        {
+            return;
+        }
+
+        GridObject other = gridManager.GetAtPosition(toCell);
+        // All damage is lethal right now, even to allies :)
+        other?.ApplyDamage(9001);
     }
 }

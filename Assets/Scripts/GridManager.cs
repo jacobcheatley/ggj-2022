@@ -120,6 +120,15 @@ public class GridManager : MonoBehaviour
         gridObjects.Remove(fromCell);
     }
 
+    public void RemoveObject(Vector3Int atCell)
+    {
+        GridObject obj = GetAtPosition(atCell);
+        Debug.Log($"Removing object {obj.name}");
+        gridObjects.Remove(atCell);
+        Destroy(obj.gameObject);
+        hoveredObject = null;
+    }
+
     public void PerformAction(Vector3Int fromCell, Vector3Int toCell, int actionId)
     {
         gridObjects[fromCell].PerformAction(toCell, actionId);
@@ -194,6 +203,7 @@ public class GridManager : MonoBehaviour
             var performedSomeAction = selectedObject.ClickCell(cell);
             if (!performedSomeAction)
             {
+                GridObject obj = GetAtPosition(cell);
                 SelectCell(cell);
             }
         }
@@ -201,27 +211,26 @@ public class GridManager : MonoBehaviour
 
     public void SelectCell(Vector3Int cell)
     {
-        overlaysTilemap.ClearAllTiles();
-        // We don't care if the selected cell is already selected. It can just go through
-        // its selection process again, which includes resetting the selection mode.
-        if (gridObjects.ContainsKey(cell))
+        var obj = GetAtPosition(cell);
+        if (obj == null || obj.owner != GridObject.Owner.Mine)
         {
-            selectedObject?.Deselect();
-            selectedObject = gridObjects[cell];
-            selectedObject.Select();
-        }
-        else if (!gridObjects.ContainsKey(cell))
-        {
-            selectedObject?.Deselect();
-            selectedObject = null;
+            return;
         }
 
+        // We don't care if the selected cell is already selected. It can just go through
+        // its selection process again, which includes resetting the selection mode.
+        overlaysTilemap.ClearAllTiles();
+
+        selectedObject?.Deselect();
+        selectedObject = obj;
+        selectedObject?.Select();
         overlaysTilemap.SetTile(cell, selectTile);
     }
 
     public void DeselectCurrentItem()
     {
         selectedObject = null;
+        overlaysTilemap.ClearAllTiles();
     }
 
     public void StartTurn()
@@ -238,6 +247,7 @@ public class GridManager : MonoBehaviour
     public void EndTurn()
     {
         Debug.Log("Ending Turn");
+        DeselectCurrentItem();
 
         whoseTurn = Turn.Theirs;
         foreach (var item in gridObjects.Values)
