@@ -9,6 +9,8 @@ public class Unit : GridObject
     private Color movementHighlightColor = new Color(0, 1, 0, 0.25f);
     [SerializeField]
     private Color actionHighlightColor = new Color(1, 0, 0, 0.25f);
+    [SerializeField]
+    private Color actionRangeHighlightColor = new Color(1, 0, 0, 0.1f);
 
     private IUnitActions actions;
 
@@ -147,6 +149,23 @@ public class Unit : GridObject
             selectedAction = actionId;
 
             ClearInteractiveCells();
+            // First apply the range colour
+            UpdateInteractiveCells(
+                gridManager.WithinCells(
+                    cellPosition,
+                    actions.GetActionRange(actionId),
+                    (manager, x, y, pos) =>
+                    {
+                        if (x == 0 && y == 0)
+                        {
+                            return false;
+                        }
+                        return true;
+                    }
+                ),
+                actionRangeHighlightColor
+            );
+            // Override targetable tiles with the proper highlight colour
             UpdateInteractiveCells(
                 gridManager.WithinCells(
                     cellPosition,

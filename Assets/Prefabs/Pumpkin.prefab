@@ -100,6 +100,7 @@ MonoBehaviour:
   speed: 3
   movementHighlightColor: {r: 0, g: 1, b: 0, a: 0.25}
   actionHighlightColor: {r: 1, g: 0, b: 0, a: 0.25}
+  actionRangeHighlightColor: {r: 1, g: 0, b: 0, a: 0.101960786}
 --- !u!114 &-212042420067780781
 MonoBehaviour:
   m_ObjectHideFlags: 0
