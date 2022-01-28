@@ -31,10 +31,10 @@ public class Unit : GridObject
     private SelectionMode previousSelectionMode = SelectionMode.None;
     private int previousSelectedAction = 0;
 
-    public override GridObject Init(GridManager gridManager, CommandQueue commands, Vector3Int cellPosition)
+    public override GridObject Init(GridManager gridManager, CommandQueue commands, Vector3Int cellPosition, Owner owner)
     {
         actions = GetComponent<IUnitActions>();
-        return base.Init(gridManager, commands, cellPosition);
+        return base.Init(gridManager, commands, cellPosition, owner);
     }
 
     public override void Select()
@@ -97,7 +97,21 @@ public class Unit : GridObject
             selectionMode = SelectionMode.Movement;
 
             ClearInteractiveCells();
-            UpdateInteractiveCells(gridManager.WithinMoveableCells(cellPosition, speed - movedDistanceThisRound), movementHighlightColor);
+            UpdateInteractiveCells(
+                gridManager.WithinCells(
+                    cellPosition,
+                    speed - movedDistanceThisRound,
+                    (manager, x, y, pos) =>
+                    {
+                        if (x == 0 && y == 0)
+                        {
+                            return false;
+                        }
+                        return manager.PositionIsEmpty(pos);
+                    }
+                ),
+                movementHighlightColor
+            );
 
             return true;
         }
@@ -133,7 +147,39 @@ public class Unit : GridObject
             selectedAction = actionId;
 
             ClearInteractiveCells();
-            UpdateInteractiveCells(gridManager.WithinActionableCells(cellPosition, actions.GetActionRange(actionId)), actionHighlightColor);
+            UpdateInteractiveCells(
+                gridManager.WithinCells(
+                    cellPosition,
+                    actions.GetActionRange(actionId),
+                    (manager, x, y, pos) =>
+                    {
+                        if (x == 0 && y == 0)
+                        {
+                            return actions.GetTargetingType(actionId).HasFlag(IUnitActions.TargetingType.Self);
+                        }
+                        if (manager.PositionIsEmpty(pos))
+                        {
+                            return actions.GetTargetingType(actionId).HasFlag(IUnitActions.TargetingType.Empty);
+                        }
+                        var target = manager.GetAtPosition(pos);
+                        switch (target.owner)
+                        {
+                            case Owner.Mine:
+                                return actions.GetTargetingType(actionId).HasFlag(IUnitActions.TargetingType.Ally);
+                            case Owner.Theirs:
+                                return actions.GetTargetingType(actionId).HasFlag(IUnitActions.TargetingType.Enemy);
+                            case Owner.Terrain:
+                                return actions.GetTargetingType(actionId).HasFlag(IUnitActions.TargetingType.Terrain);
+                            case Owner.Unclaimed:
+                                return actions.GetTargetingType(actionId).HasFlag(IUnitActions.TargetingType.Unclaimed);
+                            default:
+                                Debug.Log($"Unknown targeting result for owner {target.owner}");
+                                return true;
+                        }
+                    }
+                ),
+                actionHighlightColor
+            );
 
             return true;
         }

@@ -4,16 +4,34 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 public class GridObject : MonoBehaviour
 {
+    [Flags]
+    public enum Owner
+    {
+        Mine = 1,
+        Theirs = 2,
+        Terrain = 4,
+        Unclaimed = 8,
+    }
+
+    [SerializeField]
+    public Owner owner { get; private set; }
+
     [HideInInspector]
     public Vector3Int cellPosition;
     protected GridManager gridManager;
     protected CommandQueue commands;
 
-    public virtual GridObject Init(GridManager gridManager, CommandQueue commands, Vector3Int cellPosition)
+    public virtual GridObject Init(
+        GridManager gridManager,
+        CommandQueue commands,
+        Vector3Int cellPosition,
+        Owner owner
+        )
     {
         this.cellPosition = cellPosition;
         this.gridManager = gridManager;
         this.commands = commands;
+        this.owner = owner;
         return this;
     }
 

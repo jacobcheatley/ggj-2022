@@ -38,7 +38,7 @@ public class GridManager : MonoBehaviour
     [SerializeField]
     private CommandQueue commands;
 
-    enum Turn
+    private enum Turn
     {
         Mine,
         Theirs
@@ -56,9 +56,10 @@ public class GridManager : MonoBehaviour
         // TODO: Deterministic logic here.
         whoseTurn = Turn.Mine;
 
+        // TODO: Determine who is player 1 so we can set ownership and run StartTurn properly
         foreach (var spawnPosition in team1SpawnPositions)
         {
-            var gridObject = SpawnGridObject(testStartObject, spawnPosition);
+            var gridObject = SpawnGridObject(testStartObject, spawnPosition, GridObject.Owner.Mine);
             gridObject.GetComponent<SpriteRenderer>().color = new Color(1, 0.5f, 0);
             // TODO: Make sure we're only starting turn if it's our turn later on
             gridObject.StartTurn();
@@ -66,26 +67,47 @@ public class GridManager : MonoBehaviour
 
         foreach (var spawnPosition in team2SpawnPositions)
         {
-            var gridObject = SpawnGridObject(testStartObject, spawnPosition);
+            var gridObject = SpawnGridObject(testStartObject, spawnPosition, GridObject.Owner.Theirs);
             gridObject.GetComponent<SpriteRenderer>().color = new Color(0, 0.5f, 1);
             gridObject.StartTurn();
         }
     }
 
-    public GridObject SpawnGridObject(GameObject gridObjectPrefab, Vector2Int cellPosition)
+    public GridObject SpawnGridObject(GameObject gridObjectPrefab, Vector2Int cellPosition, GridObject.Owner owner)
     {
-        return SpawnGridObject(gridObjectPrefab, new Vector3Int(cellPosition.x, cellPosition.y, 0));
+        return SpawnGridObject(gridObjectPrefab, new Vector3Int(cellPosition.x, cellPosition.y, 0), owner);
     }
 
-    public GridObject SpawnGridObject(GameObject gridObjectPrefab, Vector3Int cellPosition)
+    public GridObject SpawnGridObject(GameObject gridObjectPrefab, Vector3Int cellPosition, GridObject.Owner owner)
     {
-        gridObjects[cellPosition] = Instantiate(gridObjectPrefab, grid.CellToWorld(cellPosition), Quaternion.identity).GetComponent<GridObject>().Init(this, commands, cellPosition);
+        gridObjects[cellPosition] = Instantiate(
+            gridObjectPrefab,
+            grid.CellToWorld(cellPosition),
+            Quaternion.identity
+            )
+            .GetComponent<GridObject>()
+        .Init(
+            this,
+            commands,
+            cellPosition,
+            owner
+        );
         return gridObjects[cellPosition];
     }
 
     public bool PositionIsEmpty(Vector3Int pos)
     {
         return !gridObjects.ContainsKey(pos);
+    }
+
+    public GridObject GetAtPosition(Vector3Int pos)
+    {
+        GridObject result;
+        if (gridObjects.TryGetValue(pos, out result))
+        {
+            return result;
+        }
+        return null;
     }
 
     public void SetPosition(Vector3Int fromCell, Vector3Int toCell)
@@ -103,21 +125,10 @@ public class GridManager : MonoBehaviour
         gridObjects[fromCell].PerformAction(toCell, actionId);
     }
 
-    public List<Vector3Int> WithinMoveableCells(Vector3Int fromCell, float distance)
-    {
-        return WithinCells(fromCell, distance, excludeSelf: true, excludeOthers: true);
-    }
-
-    public List<Vector3Int> WithinActionableCells(Vector3Int fromCell, float distance)
-    {
-        return WithinCells(fromCell, distance, excludeSelf: true, excludeOthers: false);
-    }
-
     public List<Vector3Int> WithinCells(
         Vector3Int fromCell,
         float distance,
-        bool excludeSelf = false,
-        bool excludeOthers = false
+        Func<GridManager, int, int, Vector3Int, bool> shouldKeepItem
         )
     {
         // TODO: Probably need to Dijkstra's and figure out paths at some point - but not yet!
@@ -128,20 +139,13 @@ public class GridManager : MonoBehaviour
         {
             for (int y = (int)-distance; y <= (int)distance; y++)
             {
-                if (excludeSelf && x == 0 && y == 0)
-                {
-                    continue;
-                }
-
-                var targetCell = fromCell + Vector3Int.right * x + Vector3Int.up * y;
-                if (excludeOthers && !PositionIsEmpty(targetCell))
-                {
-                    continue;
-                }
-
                 if (x * x + y * y <= squaredDistance)
                 {
-                    result.Add(targetCell);
+                    var targetCell = fromCell + Vector3Int.right * x + Vector3Int.up * y;
+                    if (shouldKeepItem(this, x, y, targetCell))
+                    {
+                        result.Add(targetCell);
+                    }
                 }
             }
         }
