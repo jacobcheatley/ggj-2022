@@ -4,13 +4,13 @@ public class Unit : GridObject
 {
     [SerializeField]
     private int speed = 3;
-    [SerializeField]
-    private int actionRange = 1;
 
     [SerializeField]
     private Color movementHighlightColor = new Color(0, 1, 0, 0.25f);
     [SerializeField]
     private Color actionHighlightColor = new Color(1, 0, 0, 0.25f);
+
+    private IUnitActions actions;
 
     private float movedDistanceThisRound = 0;
     private List<Vector3Int> interactiveCells = new List<Vector3Int>();
@@ -26,9 +26,14 @@ public class Unit : GridObject
     }
 
     private SelectionMode selectionMode = SelectionMode.None;
+    private int selectedAction = 0;
+
+    private SelectionMode previousSelectionMode = SelectionMode.None;
+    private int previousSelectedAction = 0;
 
     public override GridObject Init(GridManager gridManager, CommandQueue commands, Vector3Int cellPosition)
     {
+        actions = GetComponent<IUnitActions>();
         return base.Init(gridManager, commands, cellPosition);
     }
 
@@ -41,7 +46,7 @@ public class Unit : GridObject
         }
         else if (!hasDoneAction)
         {
-            EnterActionMode();
+            EnterActionMode(0);
         }
     }
 
@@ -57,8 +62,34 @@ public class Unit : GridObject
         gridManager.ClearOverlay();
     }
 
+    private void RecordCurrentMode()
+    {
+        previousSelectionMode = selectionMode;
+        previousSelectedAction = selectedAction;
+    }
+
+    private void RestoreMode()
+    {
+        switch (previousSelectionMode)
+        {
+            case SelectionMode.None:
+                selectionMode = previousSelectionMode;
+                break;
+            case SelectionMode.Movement:
+                EnterMoveMode();
+                break;
+            case SelectionMode.Action:
+                EnterActionMode(previousSelectedAction);
+                break;
+            default:
+                selectionMode = SelectionMode.None;
+                break;
+        }
+    }
+
     public override bool EnterMoveMode()
     {
+        RecordCurrentMode();
         base.EnterMoveMode();
 
         if (!hasMoved)
@@ -73,26 +104,44 @@ public class Unit : GridObject
         else
         {
             ClearInteractiveCells();
+            RestoreMode();
             return false;
         }
     }
 
-    public override bool EnterActionMode()
+    public override bool HasAction(int actionId)
     {
-        base.EnterActionMode();
+        return actions.HasAction(actionId);
+    }
+
+    public override bool EnterActionMode(int actionId)
+    {
+        RecordCurrentMode();
+        base.EnterActionMode(actionId);
+
+        if (!actions.HasAction(actionId))
+        {
+            ClearInteractiveCells();
+            Debug.Log("Don't have that action");
+            RestoreMode();
+            return false;
+        }
 
         if (!hasDoneAction)
         {
             selectionMode = SelectionMode.Action;
+            selectedAction = actionId;
 
             ClearInteractiveCells();
-            UpdateInteractiveCells(gridManager.WithinActionableCells(cellPosition, actionRange), actionHighlightColor);
+            UpdateInteractiveCells(gridManager.WithinActionableCells(cellPosition, actions.GetActionRange(actionId)), actionHighlightColor);
 
             return true;
         }
         else
         {
+            Debug.Log("Already done an action");
             ClearInteractiveCells();
+            RestoreMode();
             return false;
         }
     }
@@ -115,8 +164,7 @@ public class Unit : GridObject
             case SelectionMode.Action:
                 if (interactiveCells.Contains(cell))
                 {
-                    // Multiple action selection comes later
-                    SubmitActionCommand(cell, 0);
+                    SubmitActionCommand(cell, selectedAction);
                     return true;
                 }
                 return false;
@@ -145,7 +193,7 @@ public class Unit : GridObject
 
             if (!hasDoneAction)
             {
-                EnterActionMode();
+                EnterActionMode(0);
             }
             else
             {
@@ -173,10 +221,17 @@ public class Unit : GridObject
         }
     }
 
+    public override void PerformAction(Vector3Int toCell, int actionId)
+    {
+        base.PerformAction(toCell, actionId);
+
+        actions.PerformAction(gridManager, toCell, actionId);
+    }
+
     public override void StartTurn()
     {
         hasMoved = false;
-        hasDoneAction = false;
+        hasDoneAction = !actions.HasAnyActions;
         movedDistanceThisRound = 0;
     }
 

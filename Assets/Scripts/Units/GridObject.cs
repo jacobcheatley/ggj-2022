@@ -43,9 +43,14 @@ public class GridObject : MonoBehaviour
         return true;
     }
 
-    public virtual bool EnterActionMode()
+    public virtual bool HasAction(int actionId)
     {
-        Debug.Log($"Entering action mode {name}");
+        return false;
+    }
+
+    public virtual bool EnterActionMode(int actionId)
+    {
+        Debug.Log($"Entering action mode {actionId} {name}");
         return true;
     }
 

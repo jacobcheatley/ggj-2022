@@ -261,20 +261,31 @@ public class GridManager : MonoBehaviour
                 ClickCell(currentHoveredCell);
             }
 
-            if (whoseTurn == Turn.Mine && Input.GetKeyDown(KeyCode.Space))
-            {
-                EndTurn();
-            }
-
             // TODO: UI feedback if we failed to change mode (because the action/move was already used)
-            if (whoseTurn == Turn.Mine && Input.GetKeyDown(KeyCode.M))
+            if (whoseTurn == Turn.Mine)
             {
-                selectedObject?.EnterMoveMode();
-            }
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    EndTurn();
+                }
 
-            if (whoseTurn == Turn.Mine && Input.GetKeyDown(KeyCode.A))
-            {
-                selectedObject?.EnterActionMode();
+                if (Input.GetKeyDown(KeyCode.M))
+                {
+                    selectedObject?.EnterMoveMode();
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha1))
+                {
+                    selectedObject?.EnterActionMode(0);
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha2))
+                {
+                    selectedObject?.EnterActionMode(1);
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha3))
+                {
+                    selectedObject?.EnterActionMode(2);
+                }
             }
         }
     }
