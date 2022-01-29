@@ -11,13 +11,19 @@ public class SerializedCommand
         switch (type)
         {
             case "action":
-                return typeof(ActionCommand);
+                return typeof(SerializedActionCommand);
             case "move":
-                return typeof(MoveCommand);
+                return typeof(SerializedMoveCommand);
             default:
                 Debug.LogError($"Unhandled message type {type}");
                 return typeof(SerializedCommand);
         }
+    }
+
+    public virtual ICommand Deserialize()
+    {
+        Debug.LogError("This shouldn't execute");
+        return null;
     }
 
     public static ICommand Deserialize(string data)

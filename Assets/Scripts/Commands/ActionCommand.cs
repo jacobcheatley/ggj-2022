@@ -27,6 +27,7 @@ public class ActionCommand : ICommand
 
     public void Execute()
     {
+        Debug.Log("Doing an action");
         GridManager.instance.PerformAction(fromCell, toCell, actionId);
     }
 

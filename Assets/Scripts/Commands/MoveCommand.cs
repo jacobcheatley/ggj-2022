@@ -24,6 +24,7 @@ public class MoveCommand : ICommand
 
     public void Execute()
     {
+        Debug.Log("Doing a movement");
         GridManager.instance.SetPosition(fromCell, toCell);
     }
 

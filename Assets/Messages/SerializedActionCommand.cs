@@ -19,6 +19,12 @@ public class SerializedActionCommand : SerializedCommand
         this.actionId = actionId;
     }
 
+    public override ICommand Deserialize()
+    {
+        return new ActionCommand(this);
+    }
+
+
     public Vector3Int FromCell => new Vector3Int(fromX, fromY, 0);
     public Vector3Int ToCell => new Vector3Int(toX, toY, 0);
 }

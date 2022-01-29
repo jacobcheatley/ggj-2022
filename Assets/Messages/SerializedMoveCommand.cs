@@ -18,6 +18,11 @@ public class SerializedMoveCommand : SerializedCommand
         this.toY = toY;
     }
 
+    public override ICommand Deserialize()
+    {
+        return new MoveCommand(this);
+    }
+
     public Vector3Int FromCell => new Vector3Int(fromX, fromY, 0);
     public Vector3Int ToCell => new Vector3Int(toX, toY, 0);
 }

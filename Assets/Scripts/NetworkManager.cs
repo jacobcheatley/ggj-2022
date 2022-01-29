@@ -32,13 +32,6 @@ public class NetworkManager : MonoBehaviour
     {
         instance = this;
         mainThreadContext = SynchronizationContext.Current;
-
-        OnTurnMessage += NetworkManager_OnTurnMessage;
-    }
-
-    private void NetworkManager_OnTurnMessage(TurnMessage message)
-    {
-        Debug.Log($"Dank message {message.action} {message.commands.Count}");
     }
 
     public void Create(string playerName)

@@ -71,6 +71,8 @@ public class GridManager : MonoBehaviour
             gridObject.GetComponent<SpriteRenderer>().color = new Color(0, 0.5f, 1);
             gridObject.StartTurn();
         }
+
+        NetworkManager.instance.OnTurnMessage += ReceiveTurn;
     }
 
     public GridObject SpawnGridObject(GameObject gridObjectPrefab, Vector2Int cellPosition, GridObject.Owner owner)
@@ -256,9 +258,26 @@ public class GridManager : MonoBehaviour
         }
 
         commands.EndTurn();
+    }
 
-        // Until we have networking, their turn will immediately end.
-        StartTurn();
+    private void ReceiveTurn(TurnMessage message)
+    {
+        foreach (var item in message.commands)
+        {
+            Type properType = item.GetAppropriateType();
+            if (properType == typeof(SerializedActionCommand))
+            {
+                (item as SerializedActionCommand).Deserialize().Execute();
+            }
+            else if (properType == typeof(SerializedMoveCommand))
+            {
+                (item as SerializedMoveCommand).Deserialize().Execute();
+            }
+            else
+            {
+                Debug.LogError($"Unsupported command type {properType}");
+            }
+        }
     }
 
     void Update()
