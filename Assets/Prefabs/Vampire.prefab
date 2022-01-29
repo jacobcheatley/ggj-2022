@@ -12,11 +12,8 @@ GameObject:
   - component: {fileID: 8882383413272323559}
   - component: {fileID: 2456417197315186085}
   - component: {fileID: -212042420067780781}
-  - component: {fileID: 2883236509809393473}
-  - component: {fileID: 2001500866067815967}
-  - component: {fileID: 7515070767064540061}
   m_Layer: 0
-  m_Name: Pumpkin
+  m_Name: Vampire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -119,61 +116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91dd3d7e7be747e46bc01e9895e3c7f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2883236509809393473
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7564121688413721756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca2b3b94f42649249b1a5be15b326bef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  actionName: Vampire Bite
-  description: Sucky sucky sucky
-  icon: {fileID: 21300000, guid: 50917ceee06560343b0419720010d5a8, type: 3}
-  range: 1
-  value: 2
-  valueIcon: {fileID: 21300000, guid: c16621afac857d844bb382d89c4a4dc8, type: 3}
-  targeting: 16
---- !u!114 &2001500866067815967
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7564121688413721756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca2b3b94f42649249b1a5be15b326bef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  actionName: Throw Sparkles
-  description: Just like Edward Cullen when he's in the sunlight, but like not like
-    that at all
-  icon: {fileID: 21300000, guid: 89b4aa59ed05a8b4988256a91efea46d, type: 3}
-  range: 3
-  value: 1
-  valueIcon: {fileID: 21300000, guid: c16621afac857d844bb382d89c4a4dc8, type: 3}
-  targeting: 16
---- !u!114 &7515070767064540061
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7564121688413721756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38942e3cce505bc4e958a77716ec2cc4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  actionName: Fly
-  description: What a batty way to go woosh and leap, nice
-  icon: {fileID: 21300000, guid: 0ea71f94dd40e034c9792214a12e2a24, type: 3}
-  range: 5
-  value: 0
-  valueIcon: {fileID: 0}
-  targeting: 1
+  actions:
+  - {fileID: 11400000, guid: 416930d5e9fa1fe4baa2842b6a9dcc1b, type: 2}
+  - {fileID: 11400000, guid: 2eb24960dc9f5f845bdd966db5abf439, type: 2}
+  - {fileID: 11400000, guid: fd446e5c5db0ae04f91005433a023960, type: 2}

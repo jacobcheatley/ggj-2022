@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-public abstract class IAction : MonoBehaviour
+public abstract class IAction : ScriptableObject
 {
     [Flags]
     public enum TargetingType
