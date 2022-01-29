@@ -53,7 +53,7 @@ class LobbyUI : MonoBehaviour
         joinUI.SetActive(false);
 
         NetworkManager.instance.OnConnectMessage += Instance_OnConnectMessage_Join;
-        NetworkManager.instance.Join(playerName, code);
+        NetworkManager.instance.Join(playerName, code.ToUpper());
     }
 
     private void Instance_OnCodeMessage(CodeMessage message)

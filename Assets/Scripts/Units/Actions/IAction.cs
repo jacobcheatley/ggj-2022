@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEditor;
 using UnityEngine;
 
 public abstract class IAction : MonoBehaviour
@@ -14,13 +15,17 @@ public abstract class IAction : MonoBehaviour
         Unclaimed = 32,
     }
 
-    public abstract string Name { get; }
-
-    public abstract int Range { get; }
-    public abstract TargetingType Targeting { get; }
+    public string actionName = "Default Action Name";
+    public string description = "Default Action Description";
+    public Sprite icon;
+    public int range = 1;
+    public int value = 1;
+    public Sprite valueIcon;
+    [EnumFlags]
+    public TargetingType targeting = TargetingType.Enemy;
 
     public virtual void PerformAction(GridManager gridManager, Vector3Int fromCell, Vector3Int toCell)
     {
-        Debug.Log($"Performing action {Name}");
+        Debug.Log($"Performing action {actionName}");
     }
 }

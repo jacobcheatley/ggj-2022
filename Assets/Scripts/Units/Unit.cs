@@ -3,16 +3,10 @@ using UnityEngine;
 public class Unit : GridObject
 {
     [Header("Unit Stats")]
-    [SerializeField]
-    private string unitName;
-    [SerializeField]
-    private string description;
-
-    [SerializeField]
-    private int health = 5;
-
-    [SerializeField]
-    private int speed = 3;
+    public string unitName;
+    public string description;
+    public int health = 5;
+    public int speed = 3;
 
     [Header("Colours")]
     [SerializeField]
@@ -63,6 +57,7 @@ public class Unit : GridObject
     public override void Select()
     {
         base.Select();
+        SelectedUnitUI.instance.DisplayUnit(this);
         if (!hasMoved)
         {
             EnterMoveMode();

@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class UnitActions : MonoBehaviour
 {
@@ -20,12 +19,12 @@ public class UnitActions : MonoBehaviour
 
     public int GetActionRange(int actionId)
     {
-        return actions[actionId].Range;
+        return actions[actionId].range;
     }
 
     public IAction.TargetingType GetTargetingType(int actionId)
     {
-        return actions[actionId].Targeting;
+        return actions[actionId].targeting;
     }
 
     public void PerformAction(GridManager gridManager, Vector3Int fromCell, Vector3Int toCell, int actionId)
