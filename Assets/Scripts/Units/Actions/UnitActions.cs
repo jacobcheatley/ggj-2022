@@ -2,6 +2,8 @@
 
 public class UnitActions : MonoBehaviour
 {
+    [SerializeField]
+    private string label;
     public IAction[] actions;
 
     public void Init()

@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 
-[RequireComponent(typeof(SpriteRenderer))]
 public class GridObject : MonoBehaviour
 {
     [Flags]
@@ -25,8 +24,8 @@ public class GridObject : MonoBehaviour
         GridManager gridManager,
         CommandQueue commands,
         Vector3Int cellPosition,
-        Owner owner
-        )
+        Owner owner,
+        bool flipped)
     {
         this.cellPosition = cellPosition;
         this.gridManager = gridManager;

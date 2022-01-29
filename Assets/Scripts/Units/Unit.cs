@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+
 public class Unit : GridObject
 {
     [Header("Unit Info")]
@@ -67,18 +68,13 @@ public class Unit : GridObject
     private SelectionMode previousSelectionMode = SelectionMode.None;
     private int previousSelectedAction = 0;
 
-    public override GridObject Init(GridManager gridManager, CommandQueue commands, Vector3Int cellPosition, Owner owner)
+    public override GridObject Init(GridManager gridManager, CommandQueue commands, Vector3Int cellPosition, Owner owner, bool flipped)
     {
         currentHealth = dayHealth;
-        if (owner == Owner.Mine)
-        {
-            shadow.color = mineColor;
-        }
-        else
-        {
-            shadow.color = theirsColor;
-        }
-        return base.Init(gridManager, commands, cellPosition, owner);
+        shadow.color = owner == Owner.Mine ? mineColor : theirsColor;
+        character.sprite = daySprite;
+        character.flipX = flipped;
+        return base.Init(gridManager, commands, cellPosition, owner, flipped);
     }
 
     public override void Select()

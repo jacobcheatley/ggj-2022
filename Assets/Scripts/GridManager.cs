@@ -80,8 +80,7 @@ public class GridManager : MonoBehaviour
         foreach (var spawnPosition in team2SpawnPositions)
         {
             var owner = startingTurn == Turn.Theirs ? GridObject.Owner.Mine : GridObject.Owner.Theirs;
-            var gridObject = SpawnGridObject(testStartObject, spawnPosition, owner);
-            gridObject.GetComponent<SpriteRenderer>().flipX = true;
+            var gridObject = SpawnGridObject(testStartObject, spawnPosition, owner, flipped: true);
             if (owner == GridObject.Owner.Mine)
             {
                 gridObject.StartTurn(timeOfDay);
@@ -91,12 +90,12 @@ public class GridManager : MonoBehaviour
         NetworkManager.instance.OnTurnMessage += ReceiveTurn;
     }
 
-    public GridObject SpawnGridObject(GameObject gridObjectPrefab, Vector2Int cellPosition, GridObject.Owner owner)
+    public GridObject SpawnGridObject(GameObject gridObjectPrefab, Vector2Int cellPosition, GridObject.Owner owner, bool flipped = false)
     {
-        return SpawnGridObject(gridObjectPrefab, new Vector3Int(cellPosition.x, cellPosition.y, 0), owner);
+        return SpawnGridObject(gridObjectPrefab, new Vector3Int(cellPosition.x, cellPosition.y, 0), owner, flipped);
     }
 
-    public GridObject SpawnGridObject(GameObject gridObjectPrefab, Vector3Int cellPosition, GridObject.Owner owner)
+    public GridObject SpawnGridObject(GameObject gridObjectPrefab, Vector3Int cellPosition, GridObject.Owner owner, bool flipped = false)
     {
         gridObjects[cellPosition] = Instantiate(
             gridObjectPrefab,
@@ -108,7 +107,8 @@ public class GridManager : MonoBehaviour
             this,
             commands,
             cellPosition,
-            owner
+            owner,
+            flipped
         );
         return gridObjects[cellPosition];
     }
