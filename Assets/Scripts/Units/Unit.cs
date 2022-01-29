@@ -361,9 +361,18 @@ public class Unit : GridObject
         movedDistanceThisRound = 0;
     }
 
-    public override void EndTurn()
+    public override void EndTurn(GridManager.TimeOfDay time)
     {
-
+        if (time == GridManager.TimeOfDay.Daytime)
+        {
+            isDaytime = true;
+            character.sprite = daySprite;
+        }
+        else
+        {
+            isDaytime = false;
+            character.sprite = nightSpright;
+        }
     }
 
     public override bool HasDoneEverythingThisTurn()

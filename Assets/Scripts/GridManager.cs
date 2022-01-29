@@ -7,6 +7,7 @@ using System;
 [RequireComponent(typeof(Grid))]
 public class GridManager : MonoBehaviour
 {
+    private const int stepsInDay = 3;
     [Header("Map Generation")]
     // TODO spawn different things, generate a more interesting map, probably make this a scriptable object
     [SerializeField]
@@ -37,6 +38,10 @@ public class GridManager : MonoBehaviour
     [Header("The other stuff")]
     [SerializeField]
     private CommandQueue commands;
+    [SerializeField]
+    private TurnUI turnUI;
+    private string[] dayTimes = { "8:00AM", "12:00PM", "4:00PM" };
+    private string[] nightTimes = { "8:00PM", "12:00AM", "4:00AM" };
 
     [Header("Audio")]
     [SerializeField]
@@ -72,6 +77,7 @@ public class GridManager : MonoBehaviour
         whoStarted = startingTurn;
         whoseTurn = startingTurn;
         timeOfDay = TimeOfDay.Daytime;
+        turnUI.SetTurn(whoseTurn, timeOfDay, dayTimes[roundsInCurrentTimeOfDay]);
         SoundManager.instance.PlayClip(daySound);
 
         foreach (var spawnPosition in team1SpawnPositions)
@@ -267,8 +273,7 @@ public class GridManager : MonoBehaviour
         if (whoseTurnIsStarting == whoStarted)
         {
             roundsInCurrentTimeOfDay += 1;
-
-            if (roundsInCurrentTimeOfDay >= 2)
+            if (roundsInCurrentTimeOfDay >= stepsInDay)
             {
                 roundsInCurrentTimeOfDay = 0;
                 if (timeOfDay == TimeOfDay.Daytime)
@@ -286,15 +291,18 @@ public class GridManager : MonoBehaviour
             }
         }
 
+        turnUI.SetTurn(whoseTurnIsStarting, timeOfDay, (timeOfDay == TimeOfDay.Daytime ? dayTimes : nightTimes)[roundsInCurrentTimeOfDay]);
+
         Debug.Log($"Time of day is {timeOfDay}");
     }
 
     public void StartTurn()
     {
         Debug.Log("Starting turn");
-        ProgressTimeOfDay(Turn.Mine);
 
         whoseTurn = Turn.Mine;
+        ProgressTimeOfDay(Turn.Mine);
+
         foreach (var item in gridObjects.Values)
         {
             item.StartTurn(timeOfDay);
@@ -307,12 +315,12 @@ public class GridManager : MonoBehaviour
         DeselectCurrentItem();
 
         whoseTurn = Turn.Theirs;
+        ProgressTimeOfDay(Turn.Theirs);
+
         foreach (var item in gridObjects.Values)
         {
-            item.EndTurn();
+            item.EndTurn(timeOfDay);
         }
-
-        ProgressTimeOfDay(Turn.Theirs);
 
         commands.EndTurn();
     }
