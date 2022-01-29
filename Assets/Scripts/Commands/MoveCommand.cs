@@ -11,6 +11,17 @@ public class MoveCommand : ICommand
         this.toCell = toCell;
     }
 
+    public MoveCommand(SerializedMoveCommand comm)
+    {
+        fromCell = comm.FromCell;
+        toCell = comm.ToCell;
+    }
+
+    public SerializedCommand Serialize()
+    {
+        return new SerializedMoveCommand(fromCell.x, fromCell.y, toCell.x, toCell.y);
+    }
+
     public void Execute()
     {
         GridManager.instance.SetPosition(fromCell, toCell);

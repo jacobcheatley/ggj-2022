@@ -32,6 +32,13 @@ public class NetworkManager : MonoBehaviour
     {
         instance = this;
         mainThreadContext = SynchronizationContext.Current;
+
+        OnTurnMessage += NetworkManager_OnTurnMessage;
+    }
+
+    private void NetworkManager_OnTurnMessage(TurnMessage message)
+    {
+        Debug.Log($"Dank message {message.action} {message.commands.Count}");
     }
 
     public void Create(string playerName)
@@ -100,6 +107,11 @@ public class NetworkManager : MonoBehaviour
         }
 
         socket.BeginReceive(receiveBuffer, 0, receiveBuffer.Length, SocketFlags.None, new System.AsyncCallback(ReceiveCallback), null);
+    }
+
+    public void SendMessage(Message message)
+    {
+        socket.Send(Encoding.UTF8.GetBytes($"{JsonConvert.SerializeObject(message)}\n"));
     }
 
     private void SendJson(Dictionary<string, object> json)

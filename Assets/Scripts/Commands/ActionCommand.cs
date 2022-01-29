@@ -13,6 +13,18 @@ public class ActionCommand : ICommand
         this.actionId = actionId;
     }
 
+    public ActionCommand(SerializedActionCommand comm)
+    {
+        fromCell = comm.FromCell;
+        toCell = comm.ToCell;
+        actionId = comm.actionId;
+    }
+
+    public SerializedCommand Serialize()
+    {
+        return new SerializedActionCommand(fromCell.x, fromCell.y, toCell.x, toCell.y, actionId);
+    }
+
     public void Execute()
     {
         GridManager.instance.PerformAction(fromCell, toCell, actionId);

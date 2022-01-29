@@ -15,6 +15,20 @@ public class CommandQueue : MonoBehaviour
 
     public void EndTurn()
     {
+        List<SerializedCommand> serialized = new List<SerializedCommand>();
+        foreach (var item in commands)
+        {
+            serialized.Add(item.Serialize());
+        }
+
+        var message = new TurnMessage
+        {
+            action = "turn",
+            commands = serialized
+        };
+
+        NetworkManager.instance.SendMessage(message);
+
         commands.Clear();
         Debug.Log($"Ended turn with {commands.Count} commands");
     }
