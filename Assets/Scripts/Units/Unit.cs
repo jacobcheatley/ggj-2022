@@ -13,6 +13,18 @@ public class Unit : GridObject
     private Color actionRangeHighlightColor = new Color(1, 0, 0, 0.1f);
 
     private UnitActions actions;
+    private UnitActions Actions
+    {
+        get
+        {
+            if (actions == null)
+            {
+                actions = GetComponent<UnitActions>();
+                actions.Init();
+            }
+            return actions;
+        }
+    }
 
     private float movedDistanceThisRound = 0;
     private List<Vector3Int> interactiveCells = new List<Vector3Int>();
@@ -35,7 +47,6 @@ public class Unit : GridObject
 
     public override GridObject Init(GridManager gridManager, CommandQueue commands, Vector3Int cellPosition, Owner owner)
     {
-        actions = GetComponent<UnitActions>();
         return base.Init(gridManager, commands, cellPosition, owner);
     }
 
@@ -127,7 +138,7 @@ public class Unit : GridObject
 
     public override bool HasAction(int actionId)
     {
-        return actions.HasAction(actionId);
+        return Actions.HasAction(actionId);
     }
 
     public override bool EnterActionMode(int actionId)
@@ -135,7 +146,7 @@ public class Unit : GridObject
         RecordCurrentMode();
         base.EnterActionMode(actionId);
 
-        if (!actions.HasAction(actionId))
+        if (!Actions.HasAction(actionId))
         {
             ClearInteractiveCells();
             Debug.Log("Don't have that action");
@@ -153,7 +164,7 @@ public class Unit : GridObject
             UpdateInteractiveCells(
                 gridManager.WithinCells(
                     cellPosition,
-                    actions.GetActionRange(actionId),
+                    Actions.GetActionRange(actionId),
                     (manager, x, y, pos) =>
                     {
                         if (x == 0 && y == 0)
@@ -169,28 +180,28 @@ public class Unit : GridObject
             UpdateInteractiveCells(
                 gridManager.WithinCells(
                     cellPosition,
-                    actions.GetActionRange(actionId),
+                    Actions.GetActionRange(actionId),
                     (manager, x, y, pos) =>
                     {
                         if (x == 0 && y == 0)
                         {
-                            return actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Self);
+                            return Actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Self);
                         }
                         if (manager.PositionIsEmpty(pos))
                         {
-                            return actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Empty);
+                            return Actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Empty);
                         }
                         var target = manager.GetAtPosition(pos);
                         switch (target.owner)
                         {
                             case Owner.Mine:
-                                return actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Ally);
+                                return Actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Ally);
                             case Owner.Theirs:
-                                return actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Enemy);
+                                return Actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Enemy);
                             case Owner.Terrain:
-                                return actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Terrain);
+                                return Actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Terrain);
                             case Owner.Unclaimed:
-                                return actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Unclaimed);
+                                return Actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Unclaimed);
                             default:
                                 Debug.Log($"Unknown targeting result for owner {target.owner}");
                                 return true;
@@ -290,7 +301,7 @@ public class Unit : GridObject
     {
         base.PerformAction(toCell, actionId);
 
-        actions.PerformAction(gridManager, toCell, actionId);
+        Actions.PerformAction(gridManager, toCell, actionId);
     }
 
     public override void ApplyDamage(float amount)
@@ -308,7 +319,7 @@ public class Unit : GridObject
     public override void StartTurn()
     {
         hasMoved = false;
-        hasDoneAction = !actions.HasAnyActions;
+        hasDoneAction = !Actions.HasAnyActions;
         movedDistanceThisRound = 0;
     }
 

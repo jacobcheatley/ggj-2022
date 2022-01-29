@@ -5,7 +5,7 @@ public class UnitActions : MonoBehaviour
 {
     protected IAction[] actions;
 
-    private void Start()
+    public void Init()
     {
         actions = GetComponents<IAction>();
     }
