@@ -14,7 +14,7 @@ public class SoundManager : MonoBehaviour
     [SerializeField]
     private AudioSource sfxSource;
 
-    private SoundManager instance;
+    public static SoundManager instance;
 
     // Start is called before the first frame update
     void Start()

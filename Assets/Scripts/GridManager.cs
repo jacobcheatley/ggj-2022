@@ -266,10 +266,12 @@ public class GridManager : MonoBehaviour
                 roundsInCurrentTimeOfDay = 0;
                 if (timeOfDay == TimeOfDay.Daytime)
                 {
+                    SoundManager.instance.TransitionMusic(1, 5);
                     timeOfDay = TimeOfDay.Nighttime;
                 }
                 else
                 {
+                    SoundManager.instance.TransitionMusic(0, 5);
                     timeOfDay = TimeOfDay.Daytime;
                 }
             }
