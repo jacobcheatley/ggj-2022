@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class UnitActions : MonoBehaviour
 {
-    protected IAction[] actions;
+    [HideInInspector]
+    public IAction[] actions { get; protected set; }
 
     public void Init()
     {
