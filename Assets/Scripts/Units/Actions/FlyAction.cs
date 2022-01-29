@@ -8,6 +8,6 @@ public class FlyAction : IAction
     {
         base.PerformAction(gridManager, fromCell, toCell);
 
-        CommandQueue.instance.Submit(new MoveCommand(fromCell, toCell));
+        GridManager.instance.SetPosition(fromCell, toCell);
     }
 }

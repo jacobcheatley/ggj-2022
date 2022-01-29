@@ -89,7 +89,7 @@ public class GridObject : MonoBehaviour
         Debug.Log($"Perform action {actionId}");
     }
 
-    public virtual void StartTurn()
+    public virtual void StartTurn(GridManager.TimeOfDay time)
     {
         Debug.Log($"Start Turn {name}");
     }
