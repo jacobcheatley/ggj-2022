@@ -72,12 +72,15 @@ public class SelectedUnitUI : MonoBehaviour
         }
         Clear(actionIcons);
 
-        GameObject.Instantiate(actionIconPrefab, actionIcons.transform).GetComponent<ActionIconUI>().Init(walkIcon, "Walk", "Walk lol", unit.speed, () => { Debug.Log("Clicked walk"); });
-        GameObject.Instantiate(actionIconPrefab, actionIcons.transform).GetComponent<ActionIconUI>().Init(pauseIcon, "Walk", "Walk lol", 0, () => { Debug.Log("Clicked pause"); });
+        GameObject.Instantiate(actionIconPrefab, actionIcons.transform).GetComponent<ActionIconUI>().Init(walkIcon, "Walk", "Walk lol", unit.speed, () => { unit.EnterMoveMode(); });
+        GameObject.Instantiate(actionIconPrefab, actionIcons.transform).GetComponent<ActionIconUI>().Init(pauseIcon, "Pause", "Walk lol", 0, () => { Debug.Log("Clicked pause"); });
 
+        var i = 0;
         foreach (IAction action in unit.actions.actions)
         {
-            GameObject.Instantiate(actionIconPrefab, actionIcons.transform).GetComponent<ActionIconUI>().Init(action, () => { Debug.Log($"Clicked {action.actionName}"); });
+            int actionId = i;
+            GameObject.Instantiate(actionIconPrefab, actionIcons.transform).GetComponent<ActionIconUI>().Init(action, () => { unit.EnterActionMode(actionId); });
+            i++;
         }
     }
 }
