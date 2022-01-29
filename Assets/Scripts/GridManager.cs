@@ -38,7 +38,7 @@ public class GridManager : MonoBehaviour
     [SerializeField]
     private CommandQueue commands;
 
-    private enum Turn
+    public enum Turn
     {
         Mine,
         Theirs
@@ -48,28 +48,36 @@ public class GridManager : MonoBehaviour
 
     public static GridManager instance;
 
-    private void Start()
+    public void Init(Turn startingTurn)
     {
         instance = this;
         grid = GetComponent<Grid>();
 
-        // TODO: Deterministic logic here.
-        whoseTurn = Turn.Mine;
+        whoseTurn = startingTurn;
 
-        // TODO: Determine who is player 1 so we can set ownership and run StartTurn properly
+        Color mineColor = new Color(1, 0.5f, 0);
+        Color theirColor = new Color(0, 0.5f, 1);
+
         foreach (var spawnPosition in team1SpawnPositions)
         {
-            var gridObject = SpawnGridObject(testStartObject, spawnPosition, GridObject.Owner.Mine);
-            gridObject.GetComponent<SpriteRenderer>().color = new Color(1, 0.5f, 0);
-            // TODO: Make sure we're only starting turn if it's our turn later on
-            gridObject.StartTurn();
+            var owner = startingTurn == Turn.Mine ? GridObject.Owner.Mine : GridObject.Owner.Theirs;
+            var gridObject = SpawnGridObject(testStartObject, spawnPosition, owner);
+            gridObject.GetComponent<SpriteRenderer>().color = owner == GridObject.Owner.Mine ? mineColor : theirColor;
+            if (owner == GridObject.Owner.Mine)
+            {
+                gridObject.StartTurn();
+            }
         }
 
         foreach (var spawnPosition in team2SpawnPositions)
         {
-            var gridObject = SpawnGridObject(testStartObject, spawnPosition, GridObject.Owner.Theirs);
-            gridObject.GetComponent<SpriteRenderer>().color = new Color(0, 0.5f, 1);
-            gridObject.StartTurn();
+            var owner = startingTurn == Turn.Theirs ? GridObject.Owner.Mine : GridObject.Owner.Theirs;
+            var gridObject = SpawnGridObject(testStartObject, spawnPosition, owner);
+            gridObject.GetComponent<SpriteRenderer>().color = owner == GridObject.Owner.Mine ? mineColor : theirColor;
+            if (owner == GridObject.Owner.Mine)
+            {
+                gridObject.StartTurn();
+            }
         }
 
         NetworkManager.instance.OnTurnMessage += ReceiveTurn;
@@ -202,10 +210,14 @@ public class GridManager : MonoBehaviour
         }
         else
         {
-            var performedSomeAction = selectedObject.ClickCell(cell);
+            var performedSomeAction = false;
+            if (whoseTurn == Turn.Mine)
+            {
+                performedSomeAction = selectedObject.ClickCell(cell);
+            }
+
             if (!performedSomeAction)
             {
-                GridObject obj = GetAtPosition(cell);
                 SelectCell(cell);
             }
         }
@@ -262,10 +274,12 @@ public class GridManager : MonoBehaviour
 
     private void ReceiveTurn(TurnMessage message)
     {
+        Debug.Log("Received Turn");
         foreach (CommandData item in message.commands)
         {
             item.ToCommand().Execute();
         }
+        StartTurn();
     }
 
     void Update()
@@ -283,29 +297,29 @@ public class GridManager : MonoBehaviour
             }
 
             // TODO: UI feedback if we failed to change mode (because the action/move was already used)
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                selectedObject?.EnterMoveMode();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                selectedObject?.EnterActionMode(0);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                selectedObject?.EnterActionMode(1);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                selectedObject?.EnterActionMode(2);
+            }
+
             if (whoseTurn == Turn.Mine)
             {
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     EndTurn();
-                }
-
-                if (Input.GetKeyDown(KeyCode.M))
-                {
-                    selectedObject?.EnterMoveMode();
-                }
-
-                if (Input.GetKeyDown(KeyCode.Alpha1))
-                {
-                    selectedObject?.EnterActionMode(0);
-                }
-                if (Input.GetKeyDown(KeyCode.Alpha2))
-                {
-                    selectedObject?.EnterActionMode(1);
-                }
-                if (Input.GetKeyDown(KeyCode.Alpha3))
-                {
-                    selectedObject?.EnterActionMode(2);
                 }
             }
         }

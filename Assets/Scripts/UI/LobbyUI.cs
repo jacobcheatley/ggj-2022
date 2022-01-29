@@ -68,13 +68,14 @@ class LobbyUI : MonoBehaviour
     {
         // TODO
         Debug.Log($"Connect (from Create) {message.name}");
-        SceneLoadManager.instance.LoadScene("Main");
+        SceneLoadManager.instance.LoadScene("Main", () => FindObjectOfType<GridManager>().Init(GridManager.Turn.Mine));
+
     }
 
     private void Instance_OnConnectMessage_Join(ConnectMessage message)
     {
         // TODO
         Debug.Log($"Connect (from Join) {message.name}");
-        SceneLoadManager.instance.LoadScene("Main");
+        SceneLoadManager.instance.LoadScene("Main", () => FindObjectOfType<GridManager>().Init(GridManager.Turn.Theirs));
     }
 }
