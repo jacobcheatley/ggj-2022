@@ -30,6 +30,10 @@ public class SelectedUnitUI : MonoBehaviour
     [Header("Action Icons")]
     [SerializeField]
     private GameObject actionIconPrefab;
+    [SerializeField]
+    private Sprite walkIcon;
+    [SerializeField]
+    private Sprite pauseIcon;
 
     private InfoIconUI healthIconObject;
     private InfoIconUI speedIconObject;
@@ -67,9 +71,13 @@ public class SelectedUnitUI : MonoBehaviour
                 GameObject.Destroy(child.gameObject);
         }
         Clear(actionIcons);
-        //GameObject.Instantiate(iconPrefabs.GetIcon("ActionIconWalk"), actionIcons.transform);
-        //GameObject.Instantiate(iconPrefabs.GetIcon("ActionIconWait"), actionIcons.transform);
-        //foreach (IAction action in unit.Actions.actions)
-        //    GameObject.Instantiate(iconPrefabs.GetIcon(action.icon), actionIcons.transform);
+
+        GameObject.Instantiate(actionIconPrefab, actionIcons.transform).GetComponent<ActionIconUI>().Init(walkIcon, "Walk", "Walk lol", unit.speed, () => { Debug.Log("Clicked walk"); });
+        GameObject.Instantiate(actionIconPrefab, actionIcons.transform).GetComponent<ActionIconUI>().Init(pauseIcon, "Walk", "Walk lol", 0, () => { Debug.Log("Clicked pause"); });
+
+        foreach (IAction action in unit.actions.actions)
+        {
+            GameObject.Instantiate(actionIconPrefab, actionIcons.transform).GetComponent<ActionIconUI>().Init(action, () => { Debug.Log($"Clicked {action.actionName}"); });
+        }
     }
 }

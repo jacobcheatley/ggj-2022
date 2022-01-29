@@ -110,6 +110,7 @@ GameObject:
   - component: {fileID: 5811667965194287537}
   - component: {fileID: 3081186937626413289}
   - component: {fileID: 4261590190877372306}
+  - component: {fileID: 1213634367016444587}
   m_Layer: 5
   m_Name: Selected Unit UI
   m_TagString: Untagged
@@ -166,6 +167,23 @@ MonoBehaviour:
   healthIcon: {fileID: 21300000, guid: 1dbb212b74847194b801fc5d8ce2bb58, type: 3}
   speedIcon: {fileID: 21300000, guid: 5488abcece0503448bbb065dfe52d7c3, type: 3}
   actionIconPrefab: {fileID: 3783596653864252863, guid: 3fb738f527a0a8841a48b28e5fa5870c, type: 3}
+  walkIcon: {fileID: 0}
+  pauseIcon: {fileID: 0}
+--- !u!114 &1213634367016444587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1430451155203143438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!1 &4226450790945445771
 GameObject:
   m_ObjectHideFlags: 0
