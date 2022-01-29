@@ -54,7 +54,7 @@ public class GridManager : MonoBehaviour
     private Turn whoseTurn;
 
     private TimeOfDay timeOfDay;
-    private int roundsInCurrentTimeOfDay = 0; // becomes 0 at the start of the first round
+    private int roundsInCurrentTimeOfDay = 0;
 
     public static GridManager instance;
 
