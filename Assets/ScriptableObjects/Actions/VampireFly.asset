@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38942e3cce505bc4e958a77716ec2cc4, type: 3}
   m_Name: VampireFly
   m_EditorClassIdentifier: 
-  actionName: Default Action Name
-  description: Default Action Description
-  icon: {fileID: 0}
-  range: 1
-  value: 1
-  valueIcon: {fileID: 0}
-  targeting: 16
+  actionName: Vampire Bat
+  description: flap flap flap
+  icon: {fileID: 21300000, guid: 1aa60579aa8bd22459c2f24be509a1bb, type: 3}
+  range: 5
+  value: 0
+  valueIcon: {fileID: 21300000, guid: 1aa60579aa8bd22459c2f24be509a1bb, type: 3}
+  targeting: 1

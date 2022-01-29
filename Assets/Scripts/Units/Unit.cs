@@ -1,12 +1,27 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+
 public class Unit : GridObject
 {
-    [Header("Unit Stats")]
+    [Header("Unit Info")]
     public string unitName;
     public string description;
-    public int health = 5;
-    public int speed = 3;
+
+    [Header("Unit Stats - Daytime")]
+    public int dayHealth = 5;
+    public int daySpeed = 2;
+    [SerializeField]
+    private UnitActions dayActions;
+    [SerializeField]
+    private Sprite daySprite;
+
+    [Header("Unit Stats - Nighttime")]
+    public int nightHealth = 5;
+    public int nightSpeed = 3;
+    [SerializeField]
+    private UnitActions nightActions;
+    [SerializeField]
+    private Sprite nightSpright;
 
     [Header("Colours")]
     [SerializeField]
@@ -15,26 +30,30 @@ public class Unit : GridObject
     private Color actionHighlightColor = new Color(1, 0, 0, 0.25f);
     [SerializeField]
     private Color actionRangeHighlightColor = new Color(1, 0, 0, 0.1f);
+    [SerializeField]
+    private Color mineColor = new Color(0, 0.5f, 1, 0.5f);
+    [SerializeField]
+    private Color theirsColor = new Color(1, 0.5f, 0, 0.5f);
 
-    private UnitActions actions;
-    public UnitActions Actions
-    {
-        get
-        {
-            if (actions == null)
-            {
-                actions = GetComponent<UnitActions>();
-                actions.Init();
-            }
-            return actions;
-        }
-    }
+    [Header("SpriteRenderers")]
+    [SerializeField]
+    private SpriteRenderer character;
+    [SerializeField]
+    private SpriteRenderer shadow;
 
     private float movedDistanceThisRound = 0;
     private List<Vector3Int> interactiveCells = new List<Vector3Int>();
 
+    private bool isDaytime;
     private bool hasMoved;
     private bool hasDoneAction;
+
+    private int maxHealth { get { return isDaytime ? dayHealth : nightHealth; } }
+    private int speed { get { return isDaytime ? dayHealth : nightHealth; } }
+    private UnitActions actions { get { return isDaytime ? dayActions : nightActions; } }
+
+    // TODO: Change current health between day and night
+    private int currentHealth;
 
     enum SelectionMode
     {
@@ -49,9 +68,13 @@ public class Unit : GridObject
     private SelectionMode previousSelectionMode = SelectionMode.None;
     private int previousSelectedAction = 0;
 
-    public override GridObject Init(GridManager gridManager, CommandQueue commands, Vector3Int cellPosition, Owner owner)
+    public override GridObject Init(GridManager gridManager, CommandQueue commands, Vector3Int cellPosition, Owner owner, bool flipped)
     {
-        return base.Init(gridManager, commands, cellPosition, owner);
+        currentHealth = dayHealth;
+        shadow.color = owner == Owner.Mine ? mineColor : theirsColor;
+        character.sprite = daySprite;
+        character.flipX = flipped;
+        return base.Init(gridManager, commands, cellPosition, owner, flipped);
     }
 
     public override void Select()
@@ -143,7 +166,7 @@ public class Unit : GridObject
 
     public override bool HasAction(int actionId)
     {
-        return Actions.HasAction(actionId);
+        return actions.HasAction(actionId);
     }
 
     public override bool EnterActionMode(int actionId)
@@ -151,7 +174,7 @@ public class Unit : GridObject
         RecordCurrentMode();
         base.EnterActionMode(actionId);
 
-        if (!Actions.HasAction(actionId))
+        if (!actions.HasAction(actionId))
         {
             ClearInteractiveCells();
             Debug.Log("Don't have that action");
@@ -169,7 +192,7 @@ public class Unit : GridObject
             UpdateInteractiveCells(
                 gridManager.WithinCells(
                     cellPosition,
-                    Actions.GetActionRange(actionId),
+                    actions.GetActionRange(actionId),
                     (manager, x, y, pos) =>
                     {
                         if (x == 0 && y == 0)
@@ -185,28 +208,28 @@ public class Unit : GridObject
             UpdateInteractiveCells(
                 gridManager.WithinCells(
                     cellPosition,
-                    Actions.GetActionRange(actionId),
+                    actions.GetActionRange(actionId),
                     (manager, x, y, pos) =>
                     {
                         if (x == 0 && y == 0)
                         {
-                            return Actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Self);
+                            return actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Self);
                         }
                         if (manager.PositionIsEmpty(pos))
                         {
-                            return Actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Empty);
+                            return actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Empty);
                         }
                         var target = manager.GetAtPosition(pos);
                         switch (target.owner)
                         {
                             case Owner.Mine:
-                                return Actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Ally);
+                                return actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Ally);
                             case Owner.Theirs:
-                                return Actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Enemy);
+                                return actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Enemy);
                             case Owner.Terrain:
-                                return Actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Terrain);
+                                return actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Terrain);
                             case Owner.Unclaimed:
-                                return Actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Unclaimed);
+                                return actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Unclaimed);
                             default:
                                 Debug.Log($"Unknown targeting result for owner {target.owner}");
                                 return true;
@@ -306,7 +329,7 @@ public class Unit : GridObject
     {
         base.PerformAction(toCell, actionId);
 
-        Actions.PerformAction(gridManager, cellPosition, toCell, actionId);
+        actions.PerformAction(gridManager, cellPosition, toCell, actionId);
     }
 
     public override void ApplyDamage(float amount)
@@ -323,8 +346,18 @@ public class Unit : GridObject
 
     public override void StartTurn(GridManager.TimeOfDay time)
     {
+        if (time == GridManager.TimeOfDay.Daytime)
+        {
+            isDaytime = true;
+            character.sprite = daySprite;
+        }
+        else
+        {
+            isDaytime = false;
+            character.sprite = nightSpright;
+        }
         hasMoved = false;
-        hasDoneAction = !Actions.HasAnyActions;
+        hasDoneAction = !actions.HasAnyActions;
         movedDistanceThisRound = 0;
     }
 
