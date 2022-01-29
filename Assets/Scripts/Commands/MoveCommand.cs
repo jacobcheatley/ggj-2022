@@ -11,15 +11,15 @@ public class MoveCommand : ICommand
         this.toCell = toCell;
     }
 
-    public MoveCommand(SerializedMoveCommand comm)
+    public MoveCommand(MoveCommandData comm)
     {
         fromCell = comm.FromCell;
         toCell = comm.ToCell;
     }
 
-    public SerializedCommand Serialize()
+    public CommandData ToData()
     {
-        return new SerializedMoveCommand(fromCell.x, fromCell.y, toCell.x, toCell.y);
+        return new MoveCommandData(fromCell.x, fromCell.y, toCell.x, toCell.y);
     }
 
     public void Execute()

@@ -3,7 +3,7 @@
     public void Execute();
     public void Undo();
 
-    public SerializedCommand Serialize();
+    public CommandData ToData();
 
     // public abstract SerializedCommand Serialize();
 }

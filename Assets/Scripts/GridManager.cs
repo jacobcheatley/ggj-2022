@@ -262,21 +262,9 @@ public class GridManager : MonoBehaviour
 
     private void ReceiveTurn(TurnMessage message)
     {
-        foreach (var item in message.commands)
+        foreach (CommandData item in message.commands)
         {
-            Type properType = item.GetAppropriateType();
-            if (properType == typeof(SerializedActionCommand))
-            {
-                (item as SerializedActionCommand).Deserialize().Execute();
-            }
-            else if (properType == typeof(SerializedMoveCommand))
-            {
-                (item as SerializedMoveCommand).Deserialize().Execute();
-            }
-            else
-            {
-                Debug.LogError($"Unsupported command type {properType}");
-            }
+            item.ToCommand().Execute();
         }
     }
 

@@ -13,16 +13,16 @@ public class ActionCommand : ICommand
         this.actionId = actionId;
     }
 
-    public ActionCommand(SerializedActionCommand comm)
+    public ActionCommand(ActionCommandData comm)
     {
         fromCell = comm.FromCell;
         toCell = comm.ToCell;
         actionId = comm.actionId;
     }
 
-    public SerializedCommand Serialize()
+    public CommandData ToData()
     {
-        return new SerializedActionCommand(fromCell.x, fromCell.y, toCell.x, toCell.y, actionId);
+        return new ActionCommandData(fromCell.x, fromCell.y, toCell.x, toCell.y, actionId);
     }
 
     public void Execute()

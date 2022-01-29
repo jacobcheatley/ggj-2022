@@ -58,7 +58,7 @@ public class DisconnectMessage : Message
 
 public class TurnMessage : Message
 {
-    public List<SerializedCommand> commands;
+    public List<CommandData> commands;
 }
 
 public class ErrorMessage : Message

@@ -23,15 +23,21 @@ public class NetworkManager : MonoBehaviour
     private byte[] receiveBuffer = new byte[1024];
     private Socket socket;
     private string messageData;
+    private JsonSerializerSettings messageJsonSettings = new JsonSerializerSettings();
 
     public static NetworkManager instance;
 
     public SynchronizationContext mainThreadContext;
 
+    private void Awake()
+    {
+        mainThreadContext = SynchronizationContext.Current;
+        messageJsonSettings.Converters = new List<JsonConverter> { new MessageConverter(), new CommandConverter() };
+    }
+
     private void Start()
     {
         instance = this;
-        mainThreadContext = SynchronizationContext.Current;
     }
 
     public void Create(string playerName)
@@ -116,12 +122,10 @@ public class NetworkManager : MonoBehaviour
     private void ParseMessage(string messageString)
     {
         Debug.Log($"Received {messageString}");
-        var messageObject = JsonConvert.DeserializeObject<Message>(messageString);
-        Type properType = messageObject.AppropriateType();
-        dynamic t = JsonConvert.DeserializeObject(messageString, properType);
+        Message message = JsonConvert.DeserializeObject<Message>(messageString, messageJsonSettings);
         mainThreadContext.Post(_ =>
         {
-            switch (t)
+            switch (message)
             {
                 case CodeMessage message:
                     instance.OnCodeMessage?.Invoke(message);

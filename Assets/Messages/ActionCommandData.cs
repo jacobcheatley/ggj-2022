@@ -1,7 +1,7 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
+using Newtonsoft.Json;
 
-public class SerializedActionCommand : SerializedCommand
+public class ActionCommandData : CommandData
 {
     public int fromX;
     public int fromY;
@@ -9,9 +9,13 @@ public class SerializedActionCommand : SerializedCommand
     public int toY;
     public int actionId;
 
-    public SerializedActionCommand(int fromX, int fromY, int toX, int toY, int actionId)
+    public ActionCommandData()
     {
         type = "action";
+    }
+
+    public ActionCommandData(int fromX, int fromY, int toX, int toY, int actionId) : this()
+    {
         this.fromX = fromX;
         this.fromY = fromY;
         this.toX = toX;
@@ -19,12 +23,13 @@ public class SerializedActionCommand : SerializedCommand
         this.actionId = actionId;
     }
 
-    public override ICommand Deserialize()
+    public override ICommand ToCommand()
     {
         return new ActionCommand(this);
     }
 
-
+    [JsonIgnore]
     public Vector3Int FromCell => new Vector3Int(fromX, fromY, 0);
+    [JsonIgnore]
     public Vector3Int ToCell => new Vector3Int(toX, toY, 0);
 }

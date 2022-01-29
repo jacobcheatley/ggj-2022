@@ -15,10 +15,10 @@ public class CommandQueue : MonoBehaviour
 
     public void EndTurn()
     {
-        List<SerializedCommand> serialized = new List<SerializedCommand>();
+        List<CommandData> serialized = new List<CommandData>();
         foreach (var item in commands)
         {
-            serialized.Add(item.Serialize());
+            serialized.Add(item.ToData());
         }
 
         var message = new TurnMessage
