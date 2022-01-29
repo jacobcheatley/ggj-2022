@@ -53,7 +53,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7564121688413721756, guid: 9a417c161291abd4693377b85e36ddc7, type: 3}
       propertyPath: m_Name
-      value: Unit_Base
+      value: Vampire
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a417c161291abd4693377b85e36ddc7, type: 3}
