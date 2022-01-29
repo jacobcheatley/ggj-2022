@@ -12,9 +12,9 @@ public class MeleeAttackAction : IAction
     public override int Range => 1;
     public override TargetingType Targeting => TargetingType.Ally | TargetingType.Enemy | TargetingType.Empty | TargetingType.Terrain | TargetingType.Unclaimed;
 
-    public override void PerformAction(GridManager gridManager, Vector3Int toCell)
+    public override void PerformAction(GridManager gridManager, Vector3Int fromCell, Vector3Int toCell)
     {
-        base.PerformAction(gridManager, toCell);
+        base.PerformAction(gridManager, fromCell, toCell);
 
         GridObject other = gridManager.GetAtPosition(toCell);
         other?.ApplyDamage(damage);

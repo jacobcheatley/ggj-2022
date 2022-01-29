@@ -19,7 +19,7 @@ public abstract class IAction : MonoBehaviour
     public abstract int Range { get; }
     public abstract TargetingType Targeting { get; }
 
-    public virtual void PerformAction(GridManager gridManager, Vector3Int toCell)
+    public virtual void PerformAction(GridManager gridManager, Vector3Int fromCell, Vector3Int toCell)
     {
         Debug.Log($"Performing action {Name}");
     }

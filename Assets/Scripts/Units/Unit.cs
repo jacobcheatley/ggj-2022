@@ -301,7 +301,7 @@ public class Unit : GridObject
     {
         base.PerformAction(toCell, actionId);
 
-        Actions.PerformAction(gridManager, toCell, actionId);
+        Actions.PerformAction(gridManager, cellPosition, toCell, actionId);
     }
 
     public override void ApplyDamage(float amount)

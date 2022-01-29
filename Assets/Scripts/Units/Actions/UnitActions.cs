@@ -27,8 +27,8 @@ public class UnitActions : MonoBehaviour
         return actions[actionId].Targeting;
     }
 
-    public void PerformAction(GridManager gridManager, Vector3Int toCell, int actionId)
+    public void PerformAction(GridManager gridManager, Vector3Int fromCell, Vector3Int toCell, int actionId)
     {
-        actions[actionId].PerformAction(gridManager, toCell);
+        actions[actionId].PerformAction(gridManager, fromCell, toCell);
     }
 }
