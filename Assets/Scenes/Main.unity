@@ -1437,6 +1437,8 @@ MonoBehaviour:
   selectTile: {fileID: 11400000, guid: 036bf45fd092c7c4eb6d5feffcb74b87, type: 2}
   blankTile: {fileID: 11400000, guid: 147c823623905264fb38141dbdbc2a3a, type: 2}
   commands: {fileID: 352769182}
+  daySound: {fileID: 8300000, guid: 8f0c809247ba26a4cb3ee6120c62e51c, type: 3}
+  nightSound: {fileID: 8300000, guid: 1bc5296e097544d438246ff00cde7422, type: 3}
 --- !u!156049354 &2053722142
 Grid:
   m_ObjectHideFlags: 0

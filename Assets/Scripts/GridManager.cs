@@ -38,6 +38,12 @@ public class GridManager : MonoBehaviour
     [SerializeField]
     private CommandQueue commands;
 
+    [Header("Audio")]
+    [SerializeField]
+    private AudioClip daySound;
+    [SerializeField]
+    private AudioClip nightSound;
+
     public enum Turn
     {
         Mine,
@@ -66,6 +72,7 @@ public class GridManager : MonoBehaviour
         whoStarted = startingTurn;
         whoseTurn = startingTurn;
         timeOfDay = TimeOfDay.Daytime;
+        SoundManager.instance.PlayClip(daySound);
 
         foreach (var spawnPosition in team1SpawnPositions)
         {
@@ -267,11 +274,13 @@ public class GridManager : MonoBehaviour
                 if (timeOfDay == TimeOfDay.Daytime)
                 {
                     SoundManager.instance.TransitionMusic(1, 5);
+                    SoundManager.instance.PlayClip(nightSound);
                     timeOfDay = TimeOfDay.Nighttime;
                 }
                 else
                 {
                     SoundManager.instance.TransitionMusic(0, 5);
+                    SoundManager.instance.PlayClip(daySound);
                     timeOfDay = TimeOfDay.Daytime;
                 }
             }
