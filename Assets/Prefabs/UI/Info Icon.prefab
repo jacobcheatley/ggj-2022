@@ -296,7 +296,7 @@ GameObject:
   - component: {fileID: 5271400275462705656}
   - component: {fileID: 3077596636976897393}
   m_Layer: 5
-  m_Name: InfoIcon_Base
+  m_Name: Info Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -336,6 +336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53d483f8623436d40a8502af4458c807, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  image: {fileID: 82051755096109511}
   text: {fileID: 6560119198006336081}
 --- !u!1 &6721095799106866353
 GameObject:

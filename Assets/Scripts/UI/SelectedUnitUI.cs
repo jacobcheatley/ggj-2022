@@ -19,9 +19,20 @@ public class SelectedUnitUI : MonoBehaviour
     [SerializeField]
     private TMP_Text unitDescriptionText;
 
-    [Header("Prefabs")]
+    [Header("Info Icons")]
     [SerializeField]
-    private UIIcons iconPrefabs;
+    private GameObject infoIconPrefab;
+    [SerializeField]
+    private Sprite healthIcon;
+    [SerializeField]
+    private Sprite speedIcon;
+
+    [Header("Action Icons")]
+    [SerializeField]
+    private GameObject actionIconPrefab;
+
+    private InfoIconUI healthIconObject;
+    private InfoIconUI speedIconObject;
 
     public static SelectedUnitUI instance;
 
@@ -29,6 +40,9 @@ public class SelectedUnitUI : MonoBehaviour
     void Start()
     {
         instance = this;
+        // Top Icons
+        healthIconObject = GameObject.Instantiate(infoIconPrefab, unitIcons.transform).GetComponent<InfoIconUI>().Init(healthIcon, "X");
+        speedIconObject = GameObject.Instantiate(infoIconPrefab, unitIcons.transform).GetComponent<InfoIconUI>().Init(speedIcon, "X");
         layout.SetActive(false);
     }
 
@@ -36,24 +50,23 @@ public class SelectedUnitUI : MonoBehaviour
     {
         layout.SetActive(true);
 
+
+        // Text
+        unitTitleText.text = unit.unitName;
+        unitDescriptionText.text = unit.description;
+
+        // Basic stats
+        healthIconObject.Init(healthIcon, unit.health.ToString());
+        speedIconObject.Init(speedIcon, unit.speed.ToString());
+
+        // Action Icons
         // Clear
         void Clear(GameObject g)
         {
             foreach (Transform child in g.transform)
                 GameObject.Destroy(child.gameObject);
         }
-        Clear(unitIcons);
         Clear(actionIcons);
-
-        // Text
-        unitTitleText.text = unit.unitName;
-        unitDescriptionText.text = unit.description;
-
-        // Top Icons
-        //GameObject.Instantiate(iconPrefabs.GetIcon("InfoIconHeart"), unitIcons.transform).GetComponent<InfoIconUI>().Init(unit.health.ToString());
-        //GameObject.Instantiate(iconPrefabs.GetIcon("InfoIconSpeed"), unitIcons.transform).GetComponent<InfoIconUI>().Init(unit.speed.ToString());
-
-        // Action Icons
         //GameObject.Instantiate(iconPrefabs.GetIcon("ActionIconWalk"), actionIcons.transform);
         //GameObject.Instantiate(iconPrefabs.GetIcon("ActionIconWait"), actionIcons.transform);
         //foreach (IAction action in unit.Actions.actions)

@@ -162,7 +162,10 @@ MonoBehaviour:
   actionIcons: {fileID: 4226450790945445771}
   unitTitleText: {fileID: 6039853885769900245}
   unitDescriptionText: {fileID: 540167624610147918}
-  iconPrefabs: {fileID: 11400000, guid: 6390e3d063f82594f80dbfe602439894, type: 2}
+  infoIconPrefab: {fileID: 3000323485322666887, guid: 636493735634ed54092d50a1ace0d64c, type: 3}
+  healthIcon: {fileID: 21300000, guid: 1dbb212b74847194b801fc5d8ce2bb58, type: 3}
+  speedIcon: {fileID: 21300000, guid: 5488abcece0503448bbb065dfe52d7c3, type: 3}
+  actionIconPrefab: {fileID: 3783596653864252863, guid: 3fb738f527a0a8841a48b28e5fa5870c, type: 3}
 --- !u!1 &4226450790945445771
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,13 +1,18 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class InfoIconUI : MonoBehaviour
 {
     [SerializeField]
+    private Image image;
+    [SerializeField]
     private TMP_Text text;
 
-    public void Init(string value)
+    public InfoIconUI Init(Sprite sprite, string value)
     {
-        text.SetText(value);
+        image.sprite = sprite;
+        text.text = value;
+        return this;
     }
 }
