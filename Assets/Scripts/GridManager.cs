@@ -284,6 +284,9 @@ public class GridManager : MonoBehaviour
 
     void Update()
     {
+        if (instance == null)
+            return; // Hacky way to check that init happened
+
         var currentHoveredCell = grid.WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition));
         currentHoveredCell = new Vector3Int(currentHoveredCell.x, currentHoveredCell.y, 0);
 
