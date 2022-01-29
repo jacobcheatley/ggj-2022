@@ -67,14 +67,10 @@ public class GridManager : MonoBehaviour
         whoseTurn = startingTurn;
         timeOfDay = TimeOfDay.Daytime;
 
-        Color mineColor = new Color(1, 0.5f, 0);
-        Color theirColor = new Color(0, 0.5f, 1);
-
         foreach (var spawnPosition in team1SpawnPositions)
         {
             var owner = startingTurn == Turn.Mine ? GridObject.Owner.Mine : GridObject.Owner.Theirs;
             var gridObject = SpawnGridObject(testStartObject, spawnPosition, owner);
-            gridObject.GetComponent<SpriteRenderer>().color = owner == GridObject.Owner.Mine ? mineColor : theirColor;
             if (owner == GridObject.Owner.Mine)
             {
                 gridObject.StartTurn(timeOfDay);
@@ -85,7 +81,7 @@ public class GridManager : MonoBehaviour
         {
             var owner = startingTurn == Turn.Theirs ? GridObject.Owner.Mine : GridObject.Owner.Theirs;
             var gridObject = SpawnGridObject(testStartObject, spawnPosition, owner);
-            gridObject.GetComponent<SpriteRenderer>().color = owner == GridObject.Owner.Mine ? mineColor : theirColor;
+            gridObject.GetComponent<SpriteRenderer>().flipX = true;
             if (owner == GridObject.Owner.Mine)
             {
                 gridObject.StartTurn(timeOfDay);
