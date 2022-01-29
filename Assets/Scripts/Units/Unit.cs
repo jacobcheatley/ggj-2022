@@ -2,9 +2,19 @@
 using UnityEngine;
 public class Unit : GridObject
 {
+    [Header("Unit Stats")]
+    [SerializeField]
+    private string unitName;
+    [SerializeField]
+    private string description;
+
+    [SerializeField]
+    private int health = 5;
+
     [SerializeField]
     private int speed = 3;
 
+    [Header("Colours")]
     [SerializeField]
     private Color movementHighlightColor = new Color(0, 1, 0, 0.25f);
     [SerializeField]
@@ -13,7 +23,7 @@ public class Unit : GridObject
     private Color actionRangeHighlightColor = new Color(1, 0, 0, 0.1f);
 
     private UnitActions actions;
-    private UnitActions Actions
+    public UnitActions Actions
     {
         get
         {
@@ -301,7 +311,7 @@ public class Unit : GridObject
     {
         base.PerformAction(toCell, actionId);
 
-        Actions.PerformAction(gridManager, toCell, actionId);
+        Actions.PerformAction(gridManager, cellPosition, toCell, actionId);
     }
 
     public override void ApplyDamage(float amount)

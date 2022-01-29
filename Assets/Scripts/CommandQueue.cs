@@ -6,6 +6,13 @@ public class CommandQueue : MonoBehaviour
 {
     private List<ICommand> commands = new List<ICommand>();
 
+    public static CommandQueue instance;
+
+    private void Start()
+    {
+        instance = this;
+    }
+
     public void Submit(ICommand command)
     {
         command.Execute();
@@ -29,7 +36,7 @@ public class CommandQueue : MonoBehaviour
 
         NetworkManager.instance.SendMessage(message);
 
-        commands.Clear();
         Debug.Log($"Ended turn with {commands.Count} commands");
+        commands.Clear();
     }
 }
