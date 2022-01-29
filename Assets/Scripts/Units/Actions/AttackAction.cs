@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-
+[CreateAssetMenu(menuName = "Custom/AttackAction")]
 public class AttackAction : IAction
 {
     public override void PerformAction(GridManager gridManager, Vector3Int fromCell, Vector3Int toCell)

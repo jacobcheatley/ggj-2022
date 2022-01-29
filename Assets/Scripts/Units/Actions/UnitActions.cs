@@ -2,12 +2,10 @@
 
 public class UnitActions : MonoBehaviour
 {
-    [HideInInspector]
-    public IAction[] actions { get; protected set; }
+    public IAction[] actions;
 
     public void Init()
     {
-        actions = GetComponents<IAction>();
     }
 
     public bool HasAnyActions { get { return actions.Length > 0; } }
