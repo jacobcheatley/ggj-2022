@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 8882383413272323559}
   - component: {fileID: 2456417197315186085}
   - component: {fileID: -212042420067780781}
+  - component: {fileID: 7997593922154106104}
+  - component: {fileID: -5196244887459682218}
   m_Layer: 0
   m_Name: Pumpkin
   m_TagString: Untagged
@@ -110,6 +112,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 7564121688413721756}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b72fb4d6193a2904fb52534a32d811cf, type: 3}
+  m_Script: {fileID: 11500000, guid: 91dd3d7e7be747e46bc01e9895e3c7f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7997593922154106104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7564121688413721756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca2b3b94f42649249b1a5be15b326bef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 3
+--- !u!114 &-5196244887459682218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7564121688413721756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cb727f7b6a545740816d2b114fe6acb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1

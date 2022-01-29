@@ -12,7 +12,7 @@ public class Unit : GridObject
     [SerializeField]
     private Color actionRangeHighlightColor = new Color(1, 0, 0, 0.1f);
 
-    private IUnitActions actions;
+    private UnitActions actions;
 
     private float movedDistanceThisRound = 0;
     private List<Vector3Int> interactiveCells = new List<Vector3Int>();
@@ -35,7 +35,7 @@ public class Unit : GridObject
 
     public override GridObject Init(GridManager gridManager, CommandQueue commands, Vector3Int cellPosition, Owner owner)
     {
-        actions = GetComponent<IUnitActions>();
+        actions = GetComponent<UnitActions>();
         return base.Init(gridManager, commands, cellPosition, owner);
     }
 
@@ -174,23 +174,23 @@ public class Unit : GridObject
                     {
                         if (x == 0 && y == 0)
                         {
-                            return actions.GetTargetingType(actionId).HasFlag(IUnitActions.TargetingType.Self);
+                            return actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Self);
                         }
                         if (manager.PositionIsEmpty(pos))
                         {
-                            return actions.GetTargetingType(actionId).HasFlag(IUnitActions.TargetingType.Empty);
+                            return actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Empty);
                         }
                         var target = manager.GetAtPosition(pos);
                         switch (target.owner)
                         {
                             case Owner.Mine:
-                                return actions.GetTargetingType(actionId).HasFlag(IUnitActions.TargetingType.Ally);
+                                return actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Ally);
                             case Owner.Theirs:
-                                return actions.GetTargetingType(actionId).HasFlag(IUnitActions.TargetingType.Enemy);
+                                return actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Enemy);
                             case Owner.Terrain:
-                                return actions.GetTargetingType(actionId).HasFlag(IUnitActions.TargetingType.Terrain);
+                                return actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Terrain);
                             case Owner.Unclaimed:
-                                return actions.GetTargetingType(actionId).HasFlag(IUnitActions.TargetingType.Unclaimed);
+                                return actions.GetTargetingType(actionId).HasFlag(IAction.TargetingType.Unclaimed);
                             default:
                                 Debug.Log($"Unknown targeting result for owner {target.owner}");
                                 return true;
