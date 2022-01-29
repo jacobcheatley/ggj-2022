@@ -326,7 +326,7 @@ public class Unit : GridObject
         base.Destroy();
     }
 
-    public override void StartTurn()
+    public override void StartTurn(GridManager.TimeOfDay time)
     {
         hasMoved = false;
         hasDoneAction = !Actions.HasAnyActions;

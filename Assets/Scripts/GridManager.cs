@@ -44,7 +44,17 @@ public class GridManager : MonoBehaviour
         Theirs
     }
 
+    public enum TimeOfDay
+    {
+        Daytime,
+        Nighttime
+    }
+
+    private Turn whoStarted;
     private Turn whoseTurn;
+
+    private TimeOfDay timeOfDay;
+    private int roundsInCurrentTimeOfDay = 0; // becomes 0 at the start of the first round
 
     public static GridManager instance;
 
@@ -53,7 +63,9 @@ public class GridManager : MonoBehaviour
         instance = this;
         grid = GetComponent<Grid>();
 
+        whoStarted = startingTurn;
         whoseTurn = startingTurn;
+        timeOfDay = TimeOfDay.Daytime;
 
         Color mineColor = new Color(1, 0.5f, 0);
         Color theirColor = new Color(0, 0.5f, 1);
@@ -65,7 +77,7 @@ public class GridManager : MonoBehaviour
             gridObject.GetComponent<SpriteRenderer>().color = owner == GridObject.Owner.Mine ? mineColor : theirColor;
             if (owner == GridObject.Owner.Mine)
             {
-                gridObject.StartTurn();
+                gridObject.StartTurn(timeOfDay);
             }
         }
 
@@ -76,7 +88,7 @@ public class GridManager : MonoBehaviour
             gridObject.GetComponent<SpriteRenderer>().color = owner == GridObject.Owner.Mine ? mineColor : theirColor;
             if (owner == GridObject.Owner.Mine)
             {
-                gridObject.StartTurn();
+                gridObject.StartTurn(timeOfDay);
             }
         }
 
@@ -247,14 +259,38 @@ public class GridManager : MonoBehaviour
         overlaysTilemap.ClearAllTiles();
     }
 
+    private void ProgressTimeOfDay(Turn whoseTurnIsStarting)
+    {
+        if (whoseTurnIsStarting == whoStarted)
+        {
+            roundsInCurrentTimeOfDay += 1;
+
+            if (roundsInCurrentTimeOfDay >= 2)
+            {
+                roundsInCurrentTimeOfDay = 0;
+                if (timeOfDay == TimeOfDay.Daytime)
+                {
+                    timeOfDay = TimeOfDay.Nighttime;
+                }
+                else
+                {
+                    timeOfDay = TimeOfDay.Daytime;
+                }
+            }
+        }
+
+        Debug.Log($"Time of day is {timeOfDay}");
+    }
+
     public void StartTurn()
     {
         Debug.Log("Starting turn");
+        ProgressTimeOfDay(Turn.Mine);
 
         whoseTurn = Turn.Mine;
         foreach (var item in gridObjects.Values)
         {
-            item.StartTurn();
+            item.StartTurn(timeOfDay);
         }
     }
 
@@ -269,12 +305,15 @@ public class GridManager : MonoBehaviour
             item.EndTurn();
         }
 
+        ProgressTimeOfDay(Turn.Theirs);
+
         commands.EndTurn();
     }
 
     private void ReceiveTurn(TurnMessage message)
     {
         Debug.Log("Received Turn");
+
         foreach (CommandData item in message.commands)
         {
             item.ToCommand().Execute();
