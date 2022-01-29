@@ -48,12 +48,12 @@ public class Unit : GridObject
     private bool hasMoved;
     private bool hasDoneAction;
 
-    private int maxHealth { get { return isDaytime ? dayHealth : nightHealth; } }
-    private int speed { get { return isDaytime ? dayHealth : nightHealth; } }
-    private UnitActions actions { get { return isDaytime ? dayActions : nightActions; } }
+    public int maxHealth { get { return isDaytime ? dayHealth : nightHealth; } }
+    public int speed { get { return isDaytime ? daySpeed : nightSpeed; } }
+    public UnitActions actions { get { return isDaytime ? dayActions : nightActions; } }
 
     // TODO: Change current health between day and night
-    private int currentHealth;
+    public int currentHealth;
 
     enum SelectionMode
     {

@@ -56,7 +56,7 @@ public class SelectedUnitUI : MonoBehaviour
         unitDescriptionText.text = unit.description;
 
         // Basic stats
-        healthIconObject.Init(healthIcon, unit.health.ToString());
+        healthIconObject.Init(healthIcon, unit.currentHealth.ToString());
         speedIconObject.Init(speedIcon, unit.speed.ToString());
 
         // Action Icons
