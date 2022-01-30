@@ -344,15 +344,19 @@ public class Unit : GridObject
     public override void ApplyDamage(int amount)
     {
         base.ApplyDamage(amount);
-        if (amount > 0)
-            currentHealth -= amount;
+
+        Debug.Log($"Dealing {amount} damage");
+        currentHealth -= amount;
+        Debug.Log($"Health is now {currentHealth}");
+
         if (currentHealth <= 0)
-            Destroy();
-        else
         {
-            currentHealth -= amount;
-            if (currentHealth > maxHealth)
-                currentHealth = maxHealth;
+            Debug.Log("Killing");
+            Destroy();
+        }
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
         }
         UpdateUnitUI();
     }
