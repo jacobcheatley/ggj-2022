@@ -17,6 +17,6 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 342fe037f724bdf439b7c084f9e96adb, type: 3}
   range: 5
   value: 0
-  valueIcon: {fileID: 21300000, guid: 1aa60579aa8bd22459c2f24be509a1bb, type: 3}
+  valueIcon: {fileID: 21300000, guid: 342fe037f724bdf439b7c084f9e96adb, type: 3}
   sound: {fileID: 8300000, guid: 4118471cfd37ded42aa6442862784825, type: 3}
   targeting: 1
