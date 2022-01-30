@@ -1,18 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UnitUI : MonoBehaviour
 {
+    [SerializeField]
+    private Image healthImage;
 
-    // Use this for initialization
-    void Start()
+    public void Set(Unit unit)
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        healthImage.fillAmount = (float)unit.currentHealth / (float)unit.maxHealth;
     }
 }

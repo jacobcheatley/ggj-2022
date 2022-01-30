@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionName: Werewolf Rampage
   description: Rip and tear and gnaw on the bones later
-  icon: {fileID: 21300000, guid: 9cf25f2e59471be48a01e3c6a807c6a5, type: 3}
+  icon: {fileID: 21300000, guid: 7830619bd91712941be37fd2a37f4470, type: 3}
   range: 1
   value: 3
   valueIcon: {fileID: 21300000, guid: c16621afac857d844bb382d89c4a4dc8, type: 3}
   targeting: 16
+  drain: 0

@@ -352,7 +352,7 @@ public class Unit : GridObject
 
     private void UpdateUnitUI()
     {
-        throw new NotImplementedException();
+        unitUI.Set(this);
     }
 
     public override void Destroy()

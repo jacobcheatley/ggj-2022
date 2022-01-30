@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionName: Vampire Bite
   description: Blood is very nutritious, and will heal you.
-  icon: {fileID: 21300000, guid: 3e1d61119ce8e4c45a98cdde6e0b7709, type: 3}
+  icon: {fileID: 21300000, guid: 87d4213882ce2e847858418e3236c232, type: 3}
   range: 1
   value: 2
   valueIcon: {fileID: 21300000, guid: c16621afac857d844bb382d89c4a4dc8, type: 3}

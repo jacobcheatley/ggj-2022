@@ -21,11 +21,14 @@ public abstract class IAction : ScriptableObject
     public int range = 1;
     public int value = 1;
     public Sprite valueIcon;
+    public AudioClip sound;
     [EnumFlags]
     public TargetingType targeting = TargetingType.Enemy;
 
     public virtual void PerformAction(GridManager gridManager, Vector3Int fromCell, Vector3Int toCell)
     {
         Debug.Log($"Performing action {actionName}");
+        if (sound != null)
+            SoundManager.instance.PlayClip(sound);
     }
 }
