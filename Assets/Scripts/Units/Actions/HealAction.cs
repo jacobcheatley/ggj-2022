@@ -9,6 +9,6 @@ public class HealAction : IAction
         base.PerformAction(gridManager, fromCell, toCell);
 
         GridObject other = gridManager.GetAtPosition(toCell);
-        other?.ApplyDamage(value);
+        other?.ApplyDamage(-value);
     }
 }
