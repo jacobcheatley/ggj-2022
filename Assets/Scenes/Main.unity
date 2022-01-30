@@ -159,7 +159,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -64, y: 64}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 384, y: 128}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &110414776
@@ -8510,11 +8510,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5811667965194287537, guid: 3f985a6702bc4264ca01d173a086741f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 64
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5811667965194287537, guid: 3f985a6702bc4264ca01d173a086741f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 64
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5811667965194287537, guid: 3f985a6702bc4264ca01d173a086741f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -8587,16 +8587,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startObjects:
   - {fileID: 7480939479615142607, guid: 1d370a7a1e1b29d4b806fbded6071455, type: 3}
-  - {fileID: 7480939479615142607, guid: 1d370a7a1e1b29d4b806fbded6071455, type: 3}
-  - {fileID: 7480939479615142607, guid: 1d370a7a1e1b29d4b806fbded6071455, type: 3}
+  - {fileID: 7480939479615142607, guid: 10b7d0c33e656354e967c3757a2d7f1a, type: 3}
+  - {fileID: 7480939479615142607, guid: 87c1990608735b24094b4749c8cfee2d, type: 3}
   team1SpawnPositions:
-  - {x: 1, y: 2}
-  - {x: 1, y: 5}
-  - {x: 1, y: 8}
+  - {x: -5, y: 5}
+  - {x: -5, y: 0}
+  - {x: -5, y: -5}
   team2SpawnPositions:
-  - {x: 6, y: 2}
-  - {x: 6, y: 5}
-  - {x: 6, y: 8}
+  - {x: 5, y: 5}
+  - {x: 5, y: 0}
+  - {x: 5, y: -5}
   overlaysTilemap: {fileID: 608506312}
   selectTile: {fileID: 11400000, guid: 036bf45fd092c7c4eb6d5feffcb74b87, type: 2}
   blankTile: {fileID: 11400000, guid: 147c823623905264fb38141dbdbc2a3a, type: 2}
