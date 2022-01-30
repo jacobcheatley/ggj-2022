@@ -8416,14 +8416,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Selected Unit UI
       objectReference: {fileID: 0}
-    - target: {fileID: 4261590190877372306, guid: 3f985a6702bc4264ca01d173a086741f, type: 3}
-      propertyPath: walkIcon
-      value: 
-      objectReference: {fileID: 21300000, guid: 2f0b9e2b3a805e441a990d080b94ecba, type: 3}
-    - target: {fileID: 4261590190877372306, guid: 3f985a6702bc4264ca01d173a086741f, type: 3}
-      propertyPath: pauseIcon
-      value: 
-      objectReference: {fileID: 21300000, guid: a0ddb649dc541944c8a4a23945b3822d, type: 3}
     - target: {fileID: 4652789590725464478, guid: 3f985a6702bc4264ca01d173a086741f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
