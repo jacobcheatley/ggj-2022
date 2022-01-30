@@ -1,6 +1,10 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
+public class EnumFlagsAttribute : PropertyAttribute
+{
+    public EnumFlagsAttribute() { }
+}
 
 public abstract class IAction : ScriptableObject
 {
