@@ -113,20 +113,27 @@ public class Unit : GridObject
 
     private void RestoreMode()
     {
-        switch (previousSelectionMode)
+        if (previousSelectionMode == selectionMode)
         {
-            case SelectionMode.None:
-                selectionMode = previousSelectionMode;
-                break;
-            case SelectionMode.Movement:
-                EnterMoveMode();
-                break;
-            case SelectionMode.Action:
-                EnterActionMode(previousSelectedAction);
-                break;
-            default:
-                selectionMode = SelectionMode.None;
-                break;
+            selectionMode = SelectionMode.None;
+        }
+        else
+        {
+            switch (previousSelectionMode)
+            {
+                case SelectionMode.None:
+                    selectionMode = previousSelectionMode;
+                    break;
+                case SelectionMode.Movement:
+                    EnterMoveMode();
+                    break;
+                case SelectionMode.Action:
+                    EnterActionMode(previousSelectedAction);
+                    break;
+                default:
+                    selectionMode = SelectionMode.None;
+                    break;
+            }
         }
     }
 
