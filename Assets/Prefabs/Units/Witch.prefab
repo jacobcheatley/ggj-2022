@@ -8,17 +8,21 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -212042420067780781, guid: 9a417c161291abd4693377b85e36ddc7, type: 3}
-      propertyPath: actions.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: -212042420067780781, guid: 9a417c161291abd4693377b85e36ddc7, type: 3}
       propertyPath: actions.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 416930d5e9fa1fe4baa2842b6a9dcc1b, type: 2}
+      objectReference: {fileID: 11400000, guid: 9e5bb74943ecda043afe1684d74db24b, type: 2}
     - target: {fileID: -212042420067780781, guid: 9a417c161291abd4693377b85e36ddc7, type: 3}
       propertyPath: actions.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: fd446e5c5db0ae04f91005433a023960, type: 2}
+      objectReference: {fileID: 11400000, guid: dc2f0201fe80cbf4d8327948c5282125, type: 2}
+    - target: {fileID: -212042420067780781, guid: 9a417c161291abd4693377b85e36ddc7, type: 3}
+      propertyPath: actions.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 26ef4b03ea4bf654fbd6a3ddb28490e7, type: 2}
+    - target: {fileID: 1354244427666922769, guid: 9a417c161291abd4693377b85e36ddc7, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e3efeeab86fc6394884696f78dc1f18c, type: 3}
     - target: {fileID: 2290671356583921301, guid: 9a417c161291abd4693377b85e36ddc7, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -64,16 +68,36 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3027717626015780855, guid: 9a417c161291abd4693377b85e36ddc7, type: 3}
-      propertyPath: description
-      value: Vants to suck your blood mwhahaha
+      propertyPath: unitName
+      value: Witch
       objectReference: {fileID: 0}
+    - target: {fileID: 3027717626015780855, guid: 9a417c161291abd4693377b85e36ddc7, type: 3}
+      propertyPath: daySprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e3efeeab86fc6394884696f78dc1f18c, type: 3}
+    - target: {fileID: 3027717626015780855, guid: 9a417c161291abd4693377b85e36ddc7, type: 3}
+      propertyPath: maxHealth
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3027717626015780855, guid: 9a417c161291abd4693377b85e36ddc7, type: 3}
+      propertyPath: nightSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3027717626015780855, guid: 9a417c161291abd4693377b85e36ddc7, type: 3}
+      propertyPath: description
+      value: Definitely doesn't eat children to keep her youth
+      objectReference: {fileID: 0}
+    - target: {fileID: 3027717626015780855, guid: 9a417c161291abd4693377b85e36ddc7, type: 3}
+      propertyPath: nightSpright
+      value: 
+      objectReference: {fileID: 21300000, guid: ec0989bdcdb241a42a0a8c970a04844a, type: 3}
     - target: {fileID: 7290620902748591180, guid: 9a417c161291abd4693377b85e36ddc7, type: 3}
       propertyPath: actions.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 2eb24960dc9f5f845bdd966db5abf439, type: 2}
+      objectReference: {fileID: 11400000, guid: 20d67735a2b5da94c979659afce7bfc1, type: 2}
     - target: {fileID: 7564121688413721756, guid: 9a417c161291abd4693377b85e36ddc7, type: 3}
       propertyPath: m_Name
-      value: Vampire
+      value: Witch
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a417c161291abd4693377b85e36ddc7, type: 3}

@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca2b3b94f42649249b1a5be15b326bef, type: 3}
   m_Name: VampireRanged
   m_EditorClassIdentifier: 
-  actionName: Vampire Eye Lasers
-  description: zzzzpp
+  actionName: Vampire Sparkles
+  description: Vampires sparkle in the daylight. This one has weaponized it. FLASHBANG!
   icon: {fileID: 21300000, guid: 89b4aa59ed05a8b4988256a91efea46d, type: 3}
   range: 3
   value: 1
   valueIcon: {fileID: 21300000, guid: 94ba1019b2d16bf40968a617c08305d4, type: 3}
   targeting: 17
+  drain: 0

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Unit : GridObject
@@ -8,7 +9,7 @@ public class Unit : GridObject
     public string description;
 
     [Header("Unit Stats - Daytime")]
-    public int dayHealth = 5;
+    public int maxHealth = 5;
     public int daySpeed = 2;
     [SerializeField]
     private UnitActions dayActions;
@@ -16,7 +17,6 @@ public class Unit : GridObject
     private Sprite daySprite;
 
     [Header("Unit Stats - Nighttime")]
-    public int nightHealth = 5;
     public int nightSpeed = 3;
     [SerializeField]
     private UnitActions nightActions;
@@ -41,6 +41,9 @@ public class Unit : GridObject
     [SerializeField]
     private SpriteRenderer shadow;
 
+    [SerializeField]
+    private UnitUI unitUI;
+
     private float movedDistanceThisRound = 0;
     private List<Vector3Int> interactiveCells = new List<Vector3Int>();
 
@@ -48,11 +51,10 @@ public class Unit : GridObject
     private bool hasMoved;
     private bool hasDoneAction;
 
-    public int maxHealth { get { return isDaytime ? dayHealth : nightHealth; } }
     public int speed { get { return isDaytime ? daySpeed : nightSpeed; } }
     public UnitActions actions { get { return isDaytime ? dayActions : nightActions; } }
 
-    // TODO: Change current health between day and night
+    [HideInInspector]
     public int currentHealth;
 
     enum SelectionMode
@@ -70,7 +72,7 @@ public class Unit : GridObject
 
     public override GridObject Init(GridManager gridManager, CommandQueue commands, Vector3Int cellPosition, Owner owner, bool flipped)
     {
-        currentHealth = dayHealth;
+        currentHealth = maxHealth;
         shadow.color = owner == Owner.Mine ? mineColor : theirsColor;
         character.sprite = daySprite;
         character.flipX = flipped;
@@ -332,11 +334,25 @@ public class Unit : GridObject
         actions.PerformAction(gridManager, cellPosition, toCell, actionId);
     }
 
-    public override void ApplyDamage(float amount)
+    public override void ApplyDamage(int amount)
     {
         base.ApplyDamage(amount);
-        // All damage is lethal :)
-        Destroy();
+        if (amount > 0)
+            currentHealth -= amount;
+        if (currentHealth <= 0)
+            Destroy();
+        else
+        {
+            currentHealth -= amount;
+            if (currentHealth > maxHealth)
+                currentHealth = maxHealth;
+        }
+        UpdateUnitUI();
+    }
+
+    private void UpdateUnitUI()
+    {
+        throw new NotImplementedException();
     }
 
     public override void Destroy()

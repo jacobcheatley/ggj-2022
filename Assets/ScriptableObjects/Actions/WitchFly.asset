@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38942e3cce505bc4e958a77716ec2cc4, type: 3}
+  m_Name: WitchFly
+  m_EditorClassIdentifier: 
+  actionName: Fly on Broomstick
+  description: And cackle like a maniac
+  icon: {fileID: 21300000, guid: 1aa60579aa8bd22459c2f24be509a1bb, type: 3}
+  range: 5
+  value: 0
+  valueIcon: {fileID: 21300000, guid: 1aa60579aa8bd22459c2f24be509a1bb, type: 3}
+  targeting: 1

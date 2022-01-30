@@ -110,7 +110,7 @@ public class GridObject : MonoBehaviour
         return false;
     }
 
-    public virtual void ApplyDamage(float amount)
+    public virtual void ApplyDamage(int amount)
     {
         Debug.Log($"Ouch. {name}");
     }

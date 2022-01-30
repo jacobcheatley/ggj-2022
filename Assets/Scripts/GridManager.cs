@@ -11,7 +11,7 @@ public class GridManager : MonoBehaviour
     [Header("Map Generation")]
     // TODO spawn different things, generate a more interesting map, probably make this a scriptable object
     [SerializeField]
-    private GameObject testStartObject;
+    private GameObject[] startObjects;
 
     [SerializeField]
     private Vector2Int[] team1SpawnPositions;
@@ -80,24 +80,24 @@ public class GridManager : MonoBehaviour
         turnUI.SetTurn(whoseTurn, timeOfDay, dayTimes[roundsInCurrentTimeOfDay]);
         SoundManager.instance.PlayClip(daySound);
 
+        int i = 0;
         foreach (var spawnPosition in team1SpawnPositions)
         {
             var owner = startingTurn == Turn.Mine ? GridObject.Owner.Mine : GridObject.Owner.Theirs;
-            var gridObject = SpawnGridObject(testStartObject, spawnPosition, owner);
+            var gridObject = SpawnGridObject(startObjects[i], spawnPosition, owner);
             if (owner == GridObject.Owner.Mine)
-            {
                 gridObject.StartTurn(timeOfDay);
-            }
+            i += 1;
         }
 
+        i = 0;
         foreach (var spawnPosition in team2SpawnPositions)
         {
             var owner = startingTurn == Turn.Theirs ? GridObject.Owner.Mine : GridObject.Owner.Theirs;
-            var gridObject = SpawnGridObject(testStartObject, spawnPosition, owner, flipped: true);
+            var gridObject = SpawnGridObject(startObjects[i], spawnPosition, owner, flipped: true);
             if (owner == GridObject.Owner.Mine)
-            {
                 gridObject.StartTurn(timeOfDay);
-            }
+            i += 1;
         }
 
         NetworkManager.instance.OnTurnMessage += ReceiveTurn;
